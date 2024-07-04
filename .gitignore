@@ -8,4 +8,9 @@ docs/_book
 
 # TODO: where does this rule come from?
 test/
-
+node_modules
+dist
+dist-ssr
+*.local
+pnpm-lock.yaml
+package-lock.json
