@@ -3,14 +3,16 @@
 #
 # Recommended template: Node.gitignore
 
-# TODO: where does this rule come from?
+# where does this rule come from?
 docs/_book
 
-# TODO: where does this rule come from?
+# where does this rule come from?
 test/
 node_modules
 pnpm-lock.yaml
 package-lock.json
+
+.vscode
 
 # Logs
 logs
