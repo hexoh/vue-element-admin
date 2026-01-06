@@ -1,4 +1,30 @@
 # 前端仓库模板
+本项目是使用 `Vite` 构建的 `Vue3` + `TypeScript` + `Element-Plus` 的模板项目，建议使用 **`pnpm`** 下载依赖和启动项目。
+
+# 工具和框架版本号
+* **`node`**: v24.12.0
+* **`pnpm`**: 10.27.0
+* **`Vue`**: ^3.5.26
+* **`TypeScript`**: ~5.9.3
+* **`Element-Plus`**: 
+
+# 安装和使用
+* 安装依赖
+```shell
+pnpm install
+```
+
+* 运行
+```shell
+pnpm run dev
+```
+
+* 打包
+```shell
+pnpm run build
+```
+
+
 
 ## 主要是一个以后项目的模板项目，能完成基础的功能
 
