@@ -6,7 +6,7 @@
 * **`pnpm`**: 10.27.0
 * **`Vue`**: ^3.5.26
 * **`TypeScript`**: ~5.9.3
-* **`Element-Plus`**: 
+* **`Element-Plus`**: 2.13.0
 
 # 安装和使用
 * 安装依赖
@@ -23,8 +23,6 @@ pnpm run dev
 ```shell
 pnpm run build
 ```
-
-
 
 ## 主要是一个以后项目的模板项目，能完成基础的功能
 
