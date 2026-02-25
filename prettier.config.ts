@@ -1,6 +1,4 @@
-import { type Config } from 'prettier'
-
-const config: Config = {
+export default {
   printWidth: 100,
   tabWidth: 2,
   useTabs: false,
@@ -19,5 +17,3 @@ const config: Config = {
   endOfLine: 'auto',
   rangeStart: 0
 }
-
-export default config

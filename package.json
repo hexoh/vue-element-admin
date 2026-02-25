@@ -21,7 +21,10 @@
     "lint": "run-s lint:*",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache \"src/**/*.{js,ts,tsx,vue,html}\"",
-    "format": "prettier --write --experimental-cli --log-level warn \"src/**/*.{js,ts,json,tsx,css,less,vue,html,md}\""
+    "lint:style": "stylelint --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
+    "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.ts",
+    "format": "prettier --write --experimental-cli --log-level warn \"src/**/*.{js,ts,json,tsx,css,less,vue,html,md}\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "element-plus": "^2.13.0",
@@ -30,6 +33,8 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
     "@tsconfig/node24": "^24.0.3",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.4",
@@ -40,11 +45,15 @@
     "@vue/eslint-config-typescript": "^14.6.0",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
+    "autoprefixer": "^10.4.24",
+    "chalk": "^5.6.2",
+    "consola": "^3.4.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-oxlint": "~1.35.0",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-vue": "~10.6.2",
+    "husky": "^9.1.7",
     "jiti": "^2.6.1",
     "jsdom": "^27.3.0",
     "npm-run-all2": "^8.0.4",
