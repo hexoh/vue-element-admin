@@ -76,4 +76,64 @@ pnpm run build
   - `types`: 类型修改
   - `release`: 版本发布
 
-# 项目开发工具库
+# 项目目录
+
+项目目录说明如下：
+
+```
+CLIENT-TEMPLATE/
+├── public                        # 静态目录文件(不需要编译)
+├── src
+│   ├── api                       # 接口文件夹
+│   ├── assets                    # 静态目录文件(需要编译的文件)
+│   ├── components                # 公共组件库
+│   ├── composables               # 公共组合式函数
+│   ├── images                    # 图片文件夹
+│   │   └──icons                  # SVG以及Icon文件夹
+│   ├── router                    # 路由
+│   ├── stores                    # 状态管理
+│   ├── styles                    # 样式文件夹
+│   ├── views                     # 页面级组件
+│   ├── App.vue                   # 根组件文件
+│   └── main.ts                   # 启动入口文件
+├── types                         # 公共TS引用申明
+├── index.html                    # Index
+├── package.json                  # package.json
+│   ├── .editorconfig             # 统一代码配置文件
+│   ├── .oxlintrc.json            # Oxlint 配置文件
+│   ├── .prettierignore           # Prettier Ignore
+│   ├── .stylelintignore          # Stylelint Ignore
+│   ├── commitlint.config.ts      # Commitlint 配置文件
+│   ├── eslint.config.ts          # ESLint 配置文件
+│   ├── pnpm-lock.yaml            # 锁定项目依赖版本的配置文件
+│   └── prettier.config.ts        # Prettier 配置文件
+├── tsconfig.json                 # TypeScript 配置文件
+└── vite.config.js                # Vite 配置文件
+```
+
+# 开发说明
+
+开发前请详细阅读本章，有助于您了解本项目中使用的工具以及提高开发效率。
+
+## 项目开发工具库
+
+### Iconify 图标库
+
+在开发环境下会自动从互联网下载图标，打包时会将图标转换为SVG，在没有网络的情况下也能使用。
+
+使用方法：
+
+```vue
+<template>
+  <div>
+    <!-- 使用 Material Design 的账号图标 (mdi:account) -->
+    <icon-mdi-account style="font-size: 24px; color: blue;" />
+
+    <!-- 使用 Element Plus 的苹果图标 (ep:apple) -->
+    <icon-ep-apple class="my-icon" />
+
+    <!-- 使用 Vue 的 logo (logos:vue) -->
+    <icon-logos-vue />
+  </div>
+</template>
+```
