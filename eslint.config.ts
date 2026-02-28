@@ -39,7 +39,8 @@ export default defineConfigWithVueTs(
     },
     rules: {
       // 启用 Prettier 格式化规则
-      'prettier/prettier': 'error'
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-explicit-any': 0
     }
   },
 

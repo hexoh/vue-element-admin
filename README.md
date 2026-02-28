@@ -86,10 +86,10 @@ CLIENT-TEMPLATE/
 ├── src
 │   ├── api                       # 接口文件夹
 │   ├── assets                    # 静态目录文件(需要编译的文件)
+│   │   ├── images                # 图片文件夹
+│   │   └── icons                  # SVG以及Icon文件夹
 │   ├── components                # 公共组件库
 │   ├── composables               # 公共组合式函数
-│   ├── images                    # 图片文件夹
-│   │   └──icons                  # SVG以及Icon文件夹
 │   ├── router                    # 路由
 │   ├── stores                    # 状态管理
 │   ├── styles                    # 样式文件夹

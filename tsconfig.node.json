@@ -8,7 +8,9 @@
     "playwright.config.*",
     "eslint.config.*",
     "commitlint.config.*",
-    "prettier.config.*"
+    "prettier.config.*",
+    "vite.build.ts",
+    "vite.plugin.ts"
   ],
   "compilerOptions": {
     "noEmit": true,
