@@ -113,13 +113,13 @@ CLIENT-TEMPLATE/
 
 # 开发说明
 
-开发前请详细阅读本章，有助于您了解本项目中使用的工具以及提高开发效率。
+开发前请仔细阅读本章，有助于您了解本项目中使用的工具以及提高开发效率。
 
 ## 项目开发工具库
 
 ### AutoImport 自动导入
 
-本系统已经自动集成 `Vite` 的 **`unplugin-auto-import`** 插件，会自动对 `vue`、`vue-router`、`element-plus`、`pinia` 进行导入。即开发代码时，不需要在每一个页面引用如下代码:
+本项目已经自动集成 `Vite` 的 **`unplugin-auto-import`** 插件，会自动对 `vue`、`vue-router`、`element-plus`、`pinia` 进行导入。编写代码时，在代码中直接使用 `ref`、`computed`、`onMounted`等，而无需手动写 `import` 语句。插件会在编译时，自动为你添加上这些导入。
 
 ```typescript
 // 无需引用

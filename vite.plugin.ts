@@ -16,6 +16,7 @@ import { ViteEjsPlugin } from 'vite-plugin-ejs'
 import path from 'path'
 import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import'
 import EslintPlugin from 'vite-plugin-eslint2'
+import UnoCSS from 'unocss/vite'
 
 /** 获取 Element Plus 样式配置，根据环境变量决定是否按需加载 */
 const getElementPlusStyleConfig = (env: Record<string, string>) => {
@@ -97,6 +98,7 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
       transformIndexHtml(html) {
         return html.replace(/<\/body>/, `<!-- build stamp ${formatISO(new Date())} -->\n</body>`)
       }
-    }
+    },
+    UnoCSS()
   ]
 }
