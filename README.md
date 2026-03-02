@@ -117,9 +117,22 @@ CLIENT-TEMPLATE/
 
 ## 项目开发工具库
 
+### AutoImport 自动导入
+
+本系统已经自动集成 `Vite` 的 **`unplugin-auto-import`** 插件，会自动对 `vue`、`vue-router`、`element-plus`、`pinia` 进行导入。即开发代码时，不需要在每一个页面引用如下代码:
+
+```typescript
+// 无需引用
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+// 直接使用
+const count = ref<number>(0)
+```
+
 ### Iconify 图标库
 
-在开发环境下会自动从互联网下载图标，打包时会将图标转换为SVG，在没有网络的情况下也能使用。
+在开发环境下会自动从互联网下载图标，打包时会将图标转换为SVG，在没有网络的环境下也能使用。
 
 使用方法：
 

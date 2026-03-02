@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
@@ -52,6 +54,12 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
       include: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'] // 检查的文件
     }),
 
+    AutoImport({
+      imports: ['vue', 'vue-router', 'pinia'], // 按需添加
+      dts: 'src/auto-imports.d.ts',
+      resolvers: [ElementPlusResolver()]
+    }),
+
     // 配置按需自动加载组件
     Components({
       resolvers: [
@@ -60,7 +68,8 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
           prefix: 'icon' // 自定义图标组件前缀，默认是 'i'，这里改为 'icon' 以防冲突
           // 可以选择开启 collection 限制，比如只允许 mdi 和 ep (Element Plus)
           // enabledCollections: ['mdi', 'ep']
-        })
+        }),
+        ElementPlusResolver() // 自动注册 Element Plus 组件
       ],
       dts: 'types/components.d.ts' // 自动生成 ts 声明文件，解决 TS 报错
     }),

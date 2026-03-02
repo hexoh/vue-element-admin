@@ -282,11 +282,9 @@ export default {
         // SCSS 特有规则覆盖
         'scss/at-rule-no-unknown': null, // 禁用基础规则，因为已经扩展了标准配置
         'scss/dollar-variable-pattern': null, // 如果需要，可以自定义变量命名规则
-        // 'scss/at-import-partial-extension': null, // 允许 .scss 扩展名
         'scss/operator-no-unspaced': true, // 确保运算符两边有空格
         'scss/dollar-variable-empty-line-before': null, // 不强制变量前的空行
         'scss/double-slash-comment-whitespace-inside': 'always', // 强制 // 注释后的空格
-        // 'scss/at-import-no-partial-leading-underscore': true, // 禁止 _ 开头的文件扩展名
         'scss/at-extend-no-missing-placeholder': true, // 确保 @extend 使用占位符
         'scss/declaration-nested-properties': 'never' // 不允许嵌套属性
       }
