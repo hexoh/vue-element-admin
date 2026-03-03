@@ -7,13 +7,12 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import svgLoader from 'vite-svg-loader'
 import ServerUrlCopy from 'vite-plugin-url-copy'
 import progress from 'vite-plugin-progress'
 import { formatISO } from 'date-fns'
 import { ViteEjsPlugin } from 'vite-plugin-ejs'
-import path from 'path'
 import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import'
 import EslintPlugin from 'vite-plugin-eslint2'
 import UnoCSS from 'unocss/vite'
@@ -66,9 +65,9 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
       resolvers: [
         // 自动注册图标组件
         IconsResolver({
-          prefix: 'icon' // 自定义图标组件前缀，默认是 'i'，这里改为 'icon' 以防冲突
+          prefix: 'icon', // 自定义图标组件前缀，默认是 'i'，这里改为 'icon' 以防冲突
           // 可以选择开启 collection 限制，比如只允许 mdi 和 ep (Element Plus)
-          // enabledCollections: ['mdi', 'ep']
+          enabledCollections: ['local']
         }),
         ElementPlusResolver() // 自动注册 Element Plus 组件
       ],
@@ -78,16 +77,18 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
     // 配置 Iconify 图标
     Icons({
       compiler: 'vue3', // 指定编译器为 vue3
+      // 自定义图标集合，使用本地 SVG 文件,
+      customCollections: {
+        // 从 src/assets/icons 目录加载 SVG 图标，并且在加载时对 SVG 内容进行转换，添加 fill="currentColor" 属性，使图标颜色可以通过 CSS 控制
+        local: FileSystemIconLoader('src/assets/icons', (svg) =>
+          !svg.includes('fill=') ? svg.replace(/<svg\s*/, '<svg fill="currentColor" ') : svg
+        )
+      },
       autoInstall: true // 自动安装检测到的图标集（如果有未安装的，会自动用包管理器安装）
     }),
 
     /** 将 SVG 静态图转化为 Vue 组件 */
     svgLoader({ defaultImport: 'url' }),
-    /** SVG */
-    createSvgIconsPlugin({
-      iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
-      symbolId: 'icon-[dir]-[name]'
-    }),
     /** 修改标题 */
     ViteEjsPlugin({
       title: env.VITE_APP_TITLE

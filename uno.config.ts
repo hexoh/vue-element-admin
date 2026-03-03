@@ -1,11 +1,16 @@
-import { defineConfig } from 'unocss'
-import presetIcons from '@unocss/preset-icons'
-import presetUno from '@unocss/preset-uno'
-import transformerVariantGroup from '@unocss/transformer-variant-group'
+import {
+  defineConfig,
+  presetWind4,
+  presetIcons,
+  transformerVariantGroup,
+  presetAttributify
+} from 'unocss'
 
 export default defineConfig({
   presets: [
-    presetUno({ dark: 'class', attributify: false }), // 必需的基础预设
+    // presetWind4 预设
+    presetWind4(),
+    // 可选的图标预设
     presetIcons({
       autoInstall: true,
       prefix: 'i-',
@@ -13,6 +18,11 @@ export default defineConfig({
         display: 'inline-block',
         'vertical-align': 'middle'
       }
+    }),
+    // 启用属性化模式
+    presetAttributify({
+      prefix: 'un-', // 前缀
+      prefixedOnly: true // 仅匹配带前缀的属性，即强制前缀
     })
   ],
   transformers: [transformerVariantGroup()],

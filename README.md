@@ -59,23 +59,6 @@ pnpm run build
 - **`husky`**
 - **`lint-staged`**
 
-  提交前缀:
-  - `feat`: 新功能(feature)
-  - `fix` : 修补bug
-  - `docs`: 文档(documentation)
-  - `style`: 格式、样式(不影响代码运行的变动)
-  - `refactor`: 重构(即不是新增功能，也不是修改BUG的代码)
-  - `perf`: 优化相关，比如提升性能、体验
-  - `test`: 添加测试
-  - `ci`: 持续集成修改
-  - `chore`: 构建过程或辅助工具的变动
-  - `revert`: 回滚到上一个版本
-  - `workflow`: 工作流改进
-  - `mod`: 不确定分类的修改
-  - `wip`: 开发中
-  - `types`: 类型修改
-  - `release`: 版本发布
-
 # 项目目录
 
 项目目录说明如下：
@@ -117,6 +100,30 @@ CLIENT-TEMPLATE/
 
 ## 项目开发工具库
 
+### Commitlint
+
+本项目集成 **`commitlint`** 插件，提代码时描述必须严格按照格式添加前缀，否则会提交失败。
+
+提交范例: `feat: 开发**功能`、 `fix: 修补了**BUG`。
+
+提交前缀如下:
+
+- `feat`: 新功能(feature)
+- `fix` : 修补bug
+- `docs`: 文档(documentation)
+- `style`: 格式、样式(不影响代码运行的变动)
+- `refactor`: 重构(即不是新增功能，也不是修BUG的代码)
+- `perf`: 优化相关，比如提升性能、体验
+- `test`: 添加测试
+- `ci`: 持续集成修改
+- `chore`: 构建过程或辅助工具的变动
+- `revert`: 回滚到上一个版本
+- `workflow`: 工作流改进
+- `mod`: 不确定分类的修改
+- `wip`: 开发中
+- `types`: 类型修改
+- `release`: 版本发布
+
 ### AutoImport 自动导入
 
 本项目已经自动集成 `Vite` 的 **`unplugin-auto-import`** 插件，会自动对 `vue`、`vue-router`、`element-plus`、`pinia` 进行导入。编写代码时，在代码中直接使用 `ref`、`computed`、`onMounted`等，而无需手动写 `import` 语句。插件会在编译时，自动为你添加上这些导入。
@@ -134,7 +141,7 @@ const count = ref<number>(0)
 
 在开发环境下会自动从互联网下载图标，打包时会将图标转换为SVG，在没有网络的环境下也能使用。
 
-使用方法：
+`Iconify` 在线图标使用方法：
 
 ```vue
 <template>
@@ -147,6 +154,17 @@ const count = ref<number>(0)
 
     <!-- 使用 Vue 的 logo (logos:vue) -->
     <icon-logos-vue />
+  </div>
+</template>
+```
+
+使用本地自定义图标只能使用 `SVG` 图片作为图标。将要作为 `icon` 图标的 `svg` 文件放到项目 `src/assets/icons` 文件中。
+
+```vue
+<template>
+  <div>
+    <!-- 本地图标使用方法 edit为svg图标名称-->
+    <icon-local-edit />
   </div>
 </template>
 ```
