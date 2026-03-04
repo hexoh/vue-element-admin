@@ -108,21 +108,21 @@ CLIENT-TEMPLATE/
 
 提交前缀如下:
 
-- `feat`: 新功能(feature)
-- `fix` : 修补bug
-- `docs`: 文档(documentation)
-- `style`: 格式、样式(不影响代码运行的变动)
-- `refactor`: 重构(即不是新增功能，也不是修BUG的代码)
-- `perf`: 优化相关，比如提升性能、体验
-- `test`: 添加测试
-- `ci`: 持续集成修改
-- `chore`: 构建过程或辅助工具的变动
-- `revert`: 回滚到上一个版本
-- `workflow`: 工作流改进
-- `mod`: 不确定分类的修改
-- `wip`: 开发中
-- `types`: 类型修改
-- `release`: 版本发布
+- **`feat`**: 新功能(feature)
+- **`fix`** : 修补bug
+- **`docs`**: 文档(documentation)
+- **`style`**: 格式、样式(不影响代码运行的变动)
+- **`refactor`**: 重构(即不是新增功能，也不是修BUG的代码)
+- **`perf`**: 优化相关，比如提升性能、体验
+- **`test`**: 添加测试
+- **`ci`**: 持续集成修改
+- **`chore`**: 构建过程或辅助工具的变动
+- **`revert`**: 回滚到上一个版本
+- **`workflow`**: 工作流改进
+- **`mod`**: 不确定分类的修改
+- **`wip`**: 开发中
+- **`types`**: 类型修改
+- **`release`**: 版本发布
 
 ### AutoImport 自动导入
 
@@ -137,13 +137,13 @@ import { useRouter } from 'vue-router'
 const count = ref<number>(0)
 ```
 
-### Iconify 图标库
+### [Iconify](https://iconify.design/getting-started/) 图标库
 
 在开发环境下会自动从互联网下载图标，打包时会将图标转换为SVG，在没有网络的环境下也能使用。
 
-`Iconify` 在线图标使用方法：
+[**`Iconify`**](https://iconify.design/getting-started/) 在线图标使用方法：
 
-```vue
+```html
 <template>
   <div>
     <!-- 使用 Material Design 的账号图标 (mdi:account) -->
@@ -158,9 +158,9 @@ const count = ref<number>(0)
 </template>
 ```
 
-使用本地自定义图标只能使用 `SVG` 图片作为图标。将要作为 `icon` 图标的 `svg` 文件放到项目 `src/assets/icons` 文件中。
+使用本地自定义图标只能使用 `SVG` 图片作为图标。将要作为 `icon` 图标的 `svg` 文件放到项目 `src/assets/icons` 文件中。按照下面的引用方式使用:
 
-```vue
+```html
 <template>
   <div>
     <!-- 本地图标使用方法 edit为svg图标名称-->
@@ -168,3 +168,102 @@ const count = ref<number>(0)
   </div>
 </template>
 ```
+
+### [UnoCSS](https://unocss.dev/guide/)
+
+使用 `UnoCSS` 会大大减少 `CSS` 样式的编码，本项目中已经添加了官方的 [`Wind4 preset`](https://unocss.dev/presets/wind4) 预设。修改预设样式可以在 `uno.config.ts` 文件中修改。
+
+插件列表:
+
+- [**Wind4 preset**](https://unocss.dev/presets/wind4): 官方预设样式规则
+
+  ```html
+  <div class="text-3xl" />
+  <!-- text-3xl将自动转换为 -->
+  <style>
+    /* layer: default */
+    .text-3xl {
+      font-size: var(--text-3xl-fontSize);
+      line-height: var(--un-leading, var(--text-3xl-lineHeight));
+    }
+  </style>
+  ```
+
+- [**Icons preset**](https://unocss.dev/presets/icons): 图标预设
+
+  ```html
+  <!-- A basic anchor icon from Phosphor icons -->
+  <div class="i-ph-anchor-simple-thin" />
+  <!-- An orange alarm from Material Design Icons -->
+  <div class="i-mdi-alarm text-orange-400" />
+  <!-- A large Vue logo -->
+  <div class="i-logos-vue text-3xl" />
+  ```
+
+- [**Attributify preset**](https://unocss.dev/presets/attributify): 属性化模式
+
+  属性化模式是为了让class变的更简便，想象一下，你使用 Tailwind CSS 的工具类创建了这个按钮。当列表变长时，它会变得难以阅读和维护。
+
+  ```html
+  <button
+    class="bg-blue-400 hover:bg-blue-500 text-sm text-white font-mono font-light py-2 px-4 rounded border-2 border-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600"
+  >
+    Button
+  </button>
+  ```
+
+  使用属性化模式，您可以将实用程序拆分为属性：
+
+  ```html
+  <button
+    bg="blue-400 hover:blue-500 dark:blue-500 dark:hover:blue-600"
+    text="sm white"
+    font="mono light"
+    p="y-2 x-4"
+    border="2 rounded blue-200"
+  >
+    Button
+  </button>
+  ```
+
+  对于像 `flex`、`grid`、`border` 这样的实用程序，如果其实用程序与前缀相同，`~` 则会提供一个特殊值。
+
+  例如：
+
+  ```html
+  <button class="border border-red">Button</button>
+  ```
+
+  可以写成：
+
+  ```html
+  <button border="~ red">Button</button>
+  ```
+
+  由于本项目在配置中已经强制让 `unocss` 属性添加前缀，防止跟组件本身默认的属性冲突，所以上面的应该为:
+
+  ```html
+  <button
+    un-bg="blue-400 hover:blue-500 dark:blue-500 dark:hover:blue-600"
+    un-text="sm white"
+    un-font="mono light"
+    un-p="y-2 x-4"
+    un-border="2 rounded blue-200"
+  >
+    Button
+  </button>
+  ```
+
+  如果 `class` 中的值不是太多还是建议使用 `class`, 不建议使用属性方式。
+
+- [**Variant group transformer**](https://unocss.dev/transformers/variant-group): 变体组功能
+
+  ```html
+  <div class="hover:(bg-gray-400 font-medium) font-(light mono)" />
+  ```
+
+  将转换为:
+
+  ```html
+  <div class="hover:bg-gray-400 hover:font-medium font-light font-mono" />
+  ```
