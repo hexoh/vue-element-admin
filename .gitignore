@@ -44,3 +44,7 @@ stereoscopic
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# TypeScript
+types/components.d.ts
+types/auto-imports.d.ts

@@ -56,7 +56,7 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
 
     AutoImport({
       imports: ['vue', 'vue-router', 'pinia'], // 按需添加
-      dts: 'src/auto-imports.d.ts',
+      dts: 'src/types/auto-imports.d.ts',
       resolvers: [ElementPlusResolver()]
     }),
 
