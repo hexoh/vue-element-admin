@@ -29,8 +29,10 @@
   "dependencies": {
     "date-fns": "^4.1.0",
     "element-plus": "^2.13.0",
+    "lodash-es": "^4.18.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.26",
+    "vue-i18n": "^11.4.6",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
@@ -39,7 +41,7 @@
     "@tsconfig/node24": "^24.0.3",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.4",
-    "@vitejs/plugin-vue": "^6.0.3",
+    "@vitejs/plugin-vue": "^6.0.8",
     "@vitejs/plugin-vue-jsx": "^5.1.3",
     "@vitest/eslint-plugin": "^1.6.4",
     "@vue/eslint-config-prettier": "^10.2.0",
@@ -78,7 +80,7 @@
     "unplugin-auto-import": "^21.0.0",
     "unplugin-icons": "^23.0.1",
     "unplugin-vue-components": "^31.0.0",
-    "vite": "npm:rolldown-vite@latest",
+    "vite": "^8.1.5",
     "vite-plugin-ejs": "^1.7.0",
     "vite-plugin-eslint2": "^5.0.5",
     "vite-plugin-progress": "^0.0.7",
