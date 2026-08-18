@@ -3,8 +3,7 @@ export default {
   plugins: ['stylelint-order'],
   // customSyntax: 'postcss-html',
   extends: [
-    'stylelint-config-standard', // 基础的 Stylelint 规则集，适用于大多数项目
-    'stylelint-config-standard-scss' // 针对 SCSS 的 Stylelint 规则集，提供了对 SCSS 语法的支持
+    'stylelint-config-standard' // 基础的 Stylelint 规则集，适用于大多数项目
   ],
   rules: {
     'selector-pseudo-class-no-unknown': [
@@ -18,10 +17,7 @@ export default {
       {
         ignoreProperties: [
           // 添加 CSS Modules 导出属性
-          'composes',
-          'namespace',
-          'elNamespace',
-          '/^[a-z][a-zA-Z0-9]*$/' // 正则匹配驼峰式属性名
+          'composes'
         ]
       }
     ],
@@ -226,8 +222,7 @@ export default {
       customSyntax: 'postcss-html',
       extends: [
         'stylelint-config-recommended', // 基础的 Stylelint 规则集，适用于大多数项目
-        'stylelint-config-html', // 针对 HTML 文件的 Stylelint 规则集，提供了对 HTML 中内联样式的支持
-        'stylelint-config-standard-scss' // 针对 SCSS 的 Stylelint 规则集，提供了对 SCSS 语法的支持
+        'stylelint-config-html' // 针对 HTML 文件的 Stylelint 规则集，提供了对 HTML 中内联样式的支持
       ],
       rules: {
         'keyframes-name-pattern': null,
@@ -244,49 +239,7 @@ export default {
           {
             ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted']
           }
-        ],
-        // SCSS 特有规则
-        'scss/at-rule-no-unknown': [
-          true,
-          {
-            ignoreAtRules: ['/^my-/']
-          }
         ]
-      }
-    },
-    // 新增 SCSS 文件的特定配置
-    {
-      files: ['**/*.scss', '**/*.sass'],
-      // 为 SCSS/Sass 文件使用 postcss-scss
-      customSyntax: 'postcss-scss',
-      extends: ['stylelint-config-standard-scss'],
-      rules: {
-        'selector-pseudo-class-no-unknown': [
-          true,
-          {
-            ignorePseudoClasses: ['export', 'global', 'deep', 'local', 'root'] // 确保包含 export
-          }
-        ],
-        'property-no-unknown': [
-          true,
-          {
-            ignoreProperties: [
-              'composes',
-              'namespace',
-              'elNamespace',
-              // 添加其他可能的导出属性
-              /^[a-z][a-zA-Z0-9]*$/ // 匹配驼峰式属性
-            ]
-          }
-        ],
-        // SCSS 特有规则覆盖
-        'scss/at-rule-no-unknown': null, // 禁用基础规则，因为已经扩展了标准配置
-        'scss/dollar-variable-pattern': null, // 如果需要，可以自定义变量命名规则
-        'scss/operator-no-unspaced': true, // 确保运算符两边有空格
-        'scss/dollar-variable-empty-line-before': null, // 不强制变量前的空行
-        'scss/double-slash-comment-whitespace-inside': 'always', // 强制 // 注释后的空格
-        'scss/at-extend-no-missing-placeholder': true, // 确保 @extend 使用占位符
-        'scss/declaration-nested-properties': 'never' // 不允许嵌套属性
       }
     }
   ]

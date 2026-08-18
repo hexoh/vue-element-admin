@@ -30,13 +30,6 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
     // 配置插件
     plugins: createVitePluginConfig(env),
 
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@import "./src/styles/variables.module.scss";'
-        }
-      }
-    },
     // 配置路径别名
     resolve: {
       alias: {
