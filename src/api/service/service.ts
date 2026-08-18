@@ -18,6 +18,45 @@ const getPendingKey = (config: InternalAxiosRequestConfig): string => {
   return [config.method, mockPrefix].join('&')
 }
 
+const handleRequestError = (error: AxiosError) => {
+  // 主动取消或被动取消的错误，不弹窗
+  if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+    return
+  }
+
+  // 请求超时
+  if (error.code === 'ECONNABORTED') {
+    ElMessage.error('请求超时，请稍后重试')
+    return
+  }
+
+  // 无响应（网络层错误）
+  if (!error.response) {
+    if (navigator.onLine) {
+      ElMessage.error('网络异常，请检查后端服务后重试')
+    } else {
+      ElMessage.error('网络异常，请检查本地网络后重试')
+    }
+    return
+  }
+
+  const status = error.response.status
+  const data = error.response.data as { msg?: string }
+  const message = data?.msg || error.message
+
+  if (status === 401) {
+    ElMessage.error('登录已过期，请重新登录')
+  } else if (status === 403) {
+    ElMessage.error('无权限访问')
+  } else if (status === 404) {
+    ElMessage.error('请求资源不存在')
+  } else if (status >= 500) {
+    ElMessage.error('服务器异常，请稍后重试')
+  } else {
+    ElMessage.error(message)
+  }
+}
+
 const abortControllerMap: Map<string, AbortController> = new Map()
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -50,7 +89,7 @@ axiosInstance.interceptors.response.use(
     // 过滤掉主动取消的错误，避免弹窗报错
     if (!axios.isCancel(error)) {
       console.log('err: ' + error)
-      ElMessage.error(error.message || '网络异常')
+      handleRequestError(error)
     }
     return Promise.reject(error)
   }
