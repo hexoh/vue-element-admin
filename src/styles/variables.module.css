@@ -1,0 +1,11 @@
+/* 命名空间 */
+:root {
+  --namespace: v;
+  --el-namespace: el;
+}
+
+/* 导出变量 */
+:export {
+  namespace: v;
+  elNamespace: el;
+}

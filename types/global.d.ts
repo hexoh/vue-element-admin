@@ -3,6 +3,8 @@ import type { RawAxiosRequestHeaders } from 'axios'
 declare global {
   type Recordable<T = any, K = string> = Record<K extends null | undefined ? string : K, T>
 
+  type LocaleType = 'zh-CN' | 'en'
+
   /** axios content */
   type AxiosContentType =
     | 'application/json'

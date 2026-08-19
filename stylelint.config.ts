@@ -17,7 +17,9 @@ export default {
       {
         ignoreProperties: [
           // 添加 CSS Modules 导出属性
-          'composes'
+          'composes',
+          'namespace',
+          'elNamespace'
         ]
       }
     ],

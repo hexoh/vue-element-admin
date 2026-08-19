@@ -1,7 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ElConfigProvider } from 'element-plus'
+import { useLocaleStore } from '@/stores/modules/locale'
+
+const localeStore = useLocaleStore()
+</script>
 
 <template>
-  <RouterView />
+  <ElConfigProvider :locale="localeStore.getCurrentLocale.elLocale">
+    <RouterView />
+  </ElConfigProvider>
 </template>
 
 <style scoped>
