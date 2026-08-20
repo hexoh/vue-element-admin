@@ -3,11 +3,11 @@ import 'vue/jsx'
 // 引入 UnoCSS
 import '@/plugins/unocss'
 
-// 引入全局样式
-import './styles/main.css'
-
 // 引入动画
 import '@/plugins/animate'
+
+// 引入全局样式
+import './styles/main.css'
 
 // 初始化多语言
 import { setupI18n } from '@/plugins/vue-i18n'
@@ -21,11 +21,12 @@ import { setupGlobCom } from '@/components'
 // 引入 Element Plus
 import { setupElementPlus } from '@/plugins/element-plus'
 
+// 路由
+import { setupRouter } from './router'
+
 import { createApp } from 'vue'
 
 import App from './App.vue'
-
-import router from './router'
 
 // 创建实例
 const setupAll = async () => {
@@ -39,7 +40,7 @@ const setupAll = async () => {
 
   setupElementPlus(app)
 
-  app.use(router)
+  setupRouter(app)
 
   app.mount('#app')
 }

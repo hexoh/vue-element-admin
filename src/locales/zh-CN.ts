@@ -132,6 +132,7 @@ export default {
     menu12: '菜单1-2',
     menu2: '菜单2',
     dashboard: '首页',
+    about: '关于',
     analysis: '分析页',
     workplace: '工作台',
     guide: '引导',

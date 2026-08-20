@@ -3,7 +3,7 @@ import { store } from '../index'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import en from 'element-plus/es/locale/lang/en'
 import { useStorage } from '@/hooks/web/useStorage'
-import type { Language, LocaleEntry } from '@/types/locale'
+import type { Language, LocaleEntry } from '@/hooks/web/types/locale'
 
 const { getStorage, setStorage } = useStorage('localStorage')
 
