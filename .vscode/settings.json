@@ -12,5 +12,6 @@
   "prettier.enable": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "i18n-ally.localesPaths": ["src/locales"]
+  "i18n-ally.localesPaths": ["src/locales"],
+  "i18n-ally.enabledParsers": ["ts"]
 }
