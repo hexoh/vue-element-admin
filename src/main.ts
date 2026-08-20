@@ -10,13 +10,16 @@ import './styles/main.css'
 import '@/plugins/animate'
 
 // 初始化多语言
-import { setupI18n } from '@/plugins/vueI18n'
+import { setupI18n } from '@/plugins/vue-i18n'
 
 // 引入状态管理
 import { setupStore } from '@/stores'
 
 // 全局组件
 import { setupGlobCom } from '@/components'
+
+// 引入 Element Plus
+import { setupElementPlus } from '@/plugins/element-plus'
 
 import { createApp } from 'vue'
 
@@ -33,6 +36,8 @@ const setupAll = async () => {
   setupStore(app)
 
   setupGlobCom(app)
+
+  setupElementPlus(app)
 
   app.use(router)
 
