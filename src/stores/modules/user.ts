@@ -3,6 +3,7 @@ import { store } from '../index'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref<string>('')
+  const roleRouters = ref<string[] | AppCustomRouteRecordRaw[]>([])
 
   const getTokenKey = computed(() => 'Authorization')
 
@@ -16,6 +17,10 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
   }
 
+  const getRoleRouters: ComputedRef<string[] | AppCustomRouteRecordRaw[]> = computed(
+    () => roleRouters.value
+  )
+
   const logout = () => {
     // 清除用户信息
     removeToken()
@@ -25,7 +30,8 @@ export const useUserStore = defineStore('user', () => {
     logout,
     setToken,
     getToken,
-    getTokenKey
+    getTokenKey,
+    getRoleRouters
   }
 })
 

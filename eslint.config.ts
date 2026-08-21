@@ -42,7 +42,7 @@ export default defineConfigWithVueTs(
       'prettier/prettier': 'error',
       '@typescript-eslint/no-explicit-any': 0,
       // 允许单次单词的全局组件名，如 Permission
-      'vue/multi-word-component-names': ['error', { ignores: ['Permission'] }]
+      'vue/multi-word-component-names': 'off'
     }
   },
 

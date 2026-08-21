@@ -9,6 +9,7 @@ import type { CSSProperties } from 'vue'
 type PropTypes = VueTypesInterface & {
   readonly style: VueTypeValidableDef<CSSProperties>
 }
+
 const newPropTypes = createTypes({
   func: undefined,
   bool: undefined,

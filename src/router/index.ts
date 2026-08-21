@@ -7,7 +7,7 @@ import { NO_RESET_WHITE_LIST } from '@/constants'
 const { t } = useI18n()
 
 // 常量路由
-const constantRouterMap: AppRouteRecordRaw[] = [
+export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/',
     name: 'Home',

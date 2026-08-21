@@ -1,9 +1,15 @@
 import type { RawAxiosRequestHeaders } from 'axios'
 
 declare global {
+  type Nullable<T> = T | null
+
+  type ElRef<T extends HTMLElement = HTMLDivElement> = Nullable<T>
+
   type Recordable<T = any, K = string> = Record<K extends null | undefined ? string : K, T>
 
   type LocaleType = 'zh-CN' | 'en'
+
+  type LayoutType = 'classic' | 'topLeft' | 'top' | 'cutMenu'
 
   /** axios content */
   type AxiosContentType =
@@ -47,5 +53,22 @@ declare global {
       totalCount: number
       totalPage: number
     }
+  }
+
+  interface ThemeTypes {
+    elColorPrimary?: string
+    leftMenuBorderColor?: string
+    leftMenuBgColor?: string
+    leftMenuBgLightColor?: string
+    leftMenuBgActiveColor?: string
+    leftMenuCollapseBgActiveColor?: string
+    leftMenuTextColor?: string
+    leftMenuTextActiveColor?: string
+    logoTitleTextColor?: string
+    logoBorderColor?: string
+    topHeaderBgColor?: string
+    topHeaderTextColor?: string
+    topHeaderHoverColor?: string
+    topToolBorderColor?: string
   }
 }
