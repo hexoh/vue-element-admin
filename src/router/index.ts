@@ -9,9 +9,20 @@ const { t } = useI18n()
 // 常量路由
 export const constantRouterMap: AppRouteRecordRaw[] = [
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/login/Index.vue'),
+    meta: {
+      title: t('router.login'),
+      hidden: true,
+      noTagsView: true,
+      noCache: true
+    }
+  },
+  {
     path: '/',
     name: 'Home',
-    component: () => import('../views/HomeView.vue'),
+    component: () => import('../views/home/HomeView.vue'),
     meta: {
       title: t('router.dashboard'),
       icon: 'home-filled',
@@ -28,7 +39,7 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
     // route level code-splitting
     // this generates a separate chunk (About.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import('../views/AboutView.vue'),
+    component: () => import('../views/home/AboutView.vue'),
     meta: {
       title: t('router.about'),
       icon: 'info-filled',
