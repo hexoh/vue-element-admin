@@ -120,7 +120,11 @@ export default {
     passwordPlaceholder: '请输入密码',
     code: '验证码',
     codePlaceholder: '请输入验证码',
-    getCode: '获取验证码'
+    getCode: '获取验证码',
+    verifying: '验证中',
+    secureConnection: '安全连接',
+    passwordMinLength: '密码长度不能少于 6 位',
+    loginSuccess: '身份验证成功，正在进入控制台'
   },
   router: {
     login: '登录',

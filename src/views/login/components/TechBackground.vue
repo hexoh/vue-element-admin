@@ -12,11 +12,12 @@ interface Particle {
   vx: number
   vy: number
   radius: number
+  color: string
 }
 
-const LINK_DISTANCE = 140
-const MOUSE_DISTANCE = 170
-const MAX_SPEED = 0.9
+const LINK_DISTANCE = 120
+const MOUSE_DISTANCE = 150
+const MAX_SPEED = 0.8
 
 const canvasRef = ref<HTMLCanvasElement>()
 
@@ -27,14 +28,17 @@ let height = 0
 let particles: Particle[] = []
 const mouse = { x: -9999, y: -9999 }
 
+const colors = ['rgba(0, 245, 255, 0.7)', 'rgba(124, 92, 255, 0.7)', 'rgba(255, 255, 255, 0.5)']
+
 const createParticles = (): Particle[] => {
-  const count = Math.min(120, Math.floor((width * height) / 15000))
+  const count = Math.min(100, Math.floor((width * height) / 18000))
   return Array.from({ length: count }, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
-    vx: (Math.random() - 0.5) * 0.6,
-    vy: (Math.random() - 0.5) * 0.6,
-    radius: Math.random() * 1.5 + 0.6
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5,
+    radius: Math.random() * 2 + 0.5,
+    color: colors[Math.floor(Math.random() * colors.length)] as string
   }))
 }
 
@@ -69,8 +73,8 @@ const render = () => {
     const dy = mouse.y - p.y
     const distance = Math.hypot(dx, dy)
     if (distance < MOUSE_DISTANCE && distance > 0.01) {
-      p.vx += (dx / distance) * 0.015
-      p.vy += (dy / distance) * 0.015
+      p.vx += (dx / distance) * 0.01
+      p.vy += (dy / distance) * 0.01
     }
     const speed = Math.hypot(p.vx, p.vy)
     if (speed > MAX_SPEED) {
@@ -84,7 +88,7 @@ const render = () => {
 
     ctx.beginPath()
     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-    ctx.fillStyle = 'rgba(64, 216, 255, 0.75)'
+    ctx.fillStyle = p.color
     ctx.fill()
   }
 
@@ -100,8 +104,8 @@ const render = () => {
       ctx.beginPath()
       ctx.moveTo(current.x, current.y)
       ctx.lineTo(other.x, other.y)
-      ctx.strokeStyle = `rgba(56, 189, 248, ${0.35 * (1 - distance / LINK_DISTANCE)})`
-      ctx.lineWidth = 0.6
+      ctx.strokeStyle = `rgba(0, 245, 255, ${0.2 * (1 - distance / LINK_DISTANCE)})`
+      ctx.lineWidth = 0.5
       ctx.stroke()
     }
 
@@ -110,8 +114,8 @@ const render = () => {
       ctx.beginPath()
       ctx.moveTo(current.x, current.y)
       ctx.lineTo(mouse.x, mouse.y)
-      ctx.strokeStyle = `rgba(53, 226, 255, ${0.45 * (1 - mDistance / MOUSE_DISTANCE)})`
-      ctx.lineWidth = 0.8
+      ctx.strokeStyle = `rgba(0, 245, 255, ${0.3 * (1 - mDistance / MOUSE_DISTANCE)})`
+      ctx.lineWidth = 0.6
       ctx.stroke()
     }
   }
@@ -141,9 +145,9 @@ onBeforeUnmount(() => {
 <template>
   <div :class="prefixCls">
     <canvas ref="canvasRef" :class="`${prefixCls}__canvas`"></canvas>
-    <div :class="`${prefixCls}__grid`"></div>
-    <div :class="[`${prefixCls}__glow`, `${prefixCls}__glow--cyan`]"></div>
-    <div :class="[`${prefixCls}__glow`, `${prefixCls}__glow--purple`]"></div>
+    <div :class="`${prefixCls}__gradient`"></div>
+    <div :class="[`${prefixCls}__orb`, `${prefixCls}__orb--1`]"></div>
+    <div :class="[`${prefixCls}__orb`, `${prefixCls}__orb--2`]"></div>
   </div>
 </template>
 
@@ -165,52 +169,45 @@ onBeforeUnmount(() => {
   height: 100%;
 }
 
-.v-login-bg__grid {
+.v-login-bg__gradient {
   position: absolute;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 0%, rgb(5 10 22 / 80%) 100%);
   inset: 0;
-  background-image:
-    linear-gradient(rgb(53 226 255 / 5%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(53 226 255 / 5%) 1px, transparent 1px);
-  background-size: 42px 42px;
-  animation: v-bg-grid-move 6s linear infinite;
-  mask-image: radial-gradient(ellipse at center, #000 20%, transparent 78%);
 }
 
-.v-login-bg__glow {
+.v-login-bg__orb {
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
+  filter: blur(80px);
 }
 
-.v-login-bg__glow--cyan {
-  top: -160px;
-  left: -140px;
-  width: 560px;
-  height: 560px;
-  background: radial-gradient(circle, rgb(0 198 255 / 18%), transparent 65%);
-  animation: v-bg-float 14s ease-in-out infinite alternate;
+.v-login-bg__orb--1 {
+  top: -20%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgb(0 245 255 / 15%), transparent 70%);
+  animation: orbFloat 12s ease-in-out infinite alternate;
 }
 
-.v-login-bg__glow--purple {
-  right: -180px;
-  bottom: -200px;
-  width: 640px;
-  height: 640px;
-  background: radial-gradient(circle, rgb(139 92 246 / 16%), transparent 65%);
-  animation: v-bg-float 18s ease-in-out infinite alternate-reverse;
+.v-login-bg__orb--2 {
+  right: -15%;
+  bottom: -25%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgb(124 92 255 / 12%), transparent 70%);
+  animation: orbFloat 16s ease-in-out infinite alternate-reverse;
 }
 
-@keyframes v-bg-grid-move {
-  to {
-    background-position:
-      42px 42px,
-      42px 42px;
+@keyframes orbFloat {
+  from {
+    transform: translate(0, 0) scale(1);
   }
-}
 
-@keyframes v-bg-float {
   to {
-    transform: translate(40px, 30px);
+    transform: translate(50px, 40px) scale(1.1);
   }
 }
 </style>

@@ -122,7 +122,11 @@ export default {
     passwordPlaceholder: 'Please input password',
     code: 'Verification code',
     codePlaceholder: 'Please input verification code',
-    getCode: 'Get code'
+    getCode: 'Get code',
+    verifying: 'Verifying',
+    secureConnection: 'Secure Connection',
+    passwordMinLength: 'Password must be at least 6 characters',
+    loginSuccess: 'Authentication successful, entering console'
   },
   router: {
     login: 'Login',

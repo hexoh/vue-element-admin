@@ -2,7 +2,7 @@
 import { useI18n } from '@/hooks/web/useI18n'
 import { useDesign } from '@/hooks/web/useDesign'
 
-const { t } = useI18n('login')
+const { t } = useI18n()
 
 const { getPrefixCls } = useDesign()
 
@@ -11,182 +11,187 @@ const prefixCls = getPrefixCls('login-panel')
 
 <template>
   <div :class="prefixCls">
-    <span :class="[`${prefixCls}__corner`, `${prefixCls}__corner--tl`]"></span>
-    <span :class="[`${prefixCls}__corner`, `${prefixCls}__corner--tr`]"></span>
-    <span :class="[`${prefixCls}__corner`, `${prefixCls}__corner--bl`]"></span>
-    <span :class="[`${prefixCls}__corner`, `${prefixCls}__corner--br`]"></span>
-
-    <div :class="`${prefixCls}__scanline`"></div>
+    <div :class="`${prefixCls}__border`"></div>
+    <div :class="`${prefixCls}__glow`"></div>
 
     <header :class="`${prefixCls}__header`">
-      <span :class="`${prefixCls}__badge`">SECURE ACCESS</span>
-      <h2 :class="`${prefixCls}__title`">{{ t('welcome') }}</h2>
-      <p :class="`${prefixCls}__subtitle`">{{ t('message') }}</p>
+      <div :class="`${prefixCls}__logo`">
+        <svg viewBox="0 0 100 100" fill="none">
+          <defs>
+            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f5ff"></stop>
+              <stop offset="100%" stop-color="#7c5cff"></stop>
+            </linearGradient>
+          </defs>
+          <polygon
+            points="50,10 90,30 90,70 50,90 10,70 10,30"
+            stroke="url(#logo-gradient)"
+            stroke-width="2"
+            fill="rgba(0, 245, 255, 0.05)"
+          />
+          <circle cx="50" cy="50" r="12" fill="url(#logo-gradient)" />
+          <circle
+            cx="50"
+            cy="50"
+            r="20"
+            stroke="rgba(0, 245, 255, 0.3)"
+            stroke-width="1"
+            fill="none"
+          />
+        </svg>
+      </div>
+      <h2 :class="`${prefixCls}__title`">{{ t('login.welcome') }}</h2>
+      <p :class="`${prefixCls}__subtitle`">{{ t('login.message') }}</p>
     </header>
 
     <slot></slot>
+
+    <footer :class="`${prefixCls}__footer`">
+      <span :class="`${prefixCls}__dot`"></span>
+      <span>{{ t('login.secureConnection') }}</span>
+    </footer>
   </div>
 </template>
 
 <style scoped>
 .v-login-panel {
   position: relative;
-  width: 420px;
+  width: 440px;
   max-width: calc(100vw - 32px);
-  padding: 42px 38px;
-  background: linear-gradient(160deg, rgb(13 26 48 / 72%), rgb(6 12 26 / 85%));
-  border: 1px solid rgb(53 226 255 / 22%);
-  border-radius: 4px;
-  box-shadow:
-    0 0 42px rgb(0 140 255 / 12%),
-    inset 0 0 22px rgb(53 226 255 / 5%);
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-  backdrop-filter: blur(14px);
+  padding: 48px 40px;
+  background: linear-gradient(135deg, rgb(10 20 40 / 90%), rgb(5 10 25 / 95%));
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
 }
 
-.v-login-panel:hover {
-  border-color: rgb(53 226 255 / 45%);
-  box-shadow:
-    0 0 60px rgb(0 170 255 / 20%),
-    inset 0 0 26px rgb(53 226 255 / 8%);
-}
-
-.v-login-panel__corner {
+.v-login-panel__border {
   position: absolute;
-  width: 16px;
-  height: 16px;
-  border: 1px solid #35e2ff;
-  animation: v-panel-corner-pulse 2.4s ease-in-out infinite;
-}
-
-.v-login-panel__corner--tl {
-  top: -1px;
-  left: -1px;
-  border-right: none;
-  border-bottom: none;
-}
-
-.v-login-panel__corner--tr {
-  top: -1px;
-  right: -1px;
-  border-bottom: none;
-  border-left: none;
-  animation-delay: 0.3s;
-}
-
-.v-login-panel__corner--bl {
-  bottom: -1px;
-  left: -1px;
-  border-top: none;
-  border-right: none;
-  animation-delay: 0.6s;
-}
-
-.v-login-panel__corner--br {
-  right: -1px;
-  bottom: -1px;
-  border-top: none;
-  border-left: none;
-  animation-delay: 0.9s;
-}
-
-.v-login-panel__scanline {
-  position: absolute;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgb(0 245 255 / 50%),
+    rgb(124 92 255 / 50%),
+    rgb(0 245 255 / 10%)
+  );
+  border-radius: 16px;
+  animation: borderRotate 4s linear infinite;
   inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  mask-composite: exclude;
 }
 
-.v-login-panel__scanline::after {
+.v-login-panel__glow {
   position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 30%;
-  background: linear-gradient(to bottom, transparent, rgb(53 226 255 / 7%), transparent);
-  content: '';
-  animation: v-panel-scan 5s linear infinite;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, rgb(0 245 255 / 10%), transparent 50%);
+  animation: glowMove 8s ease-in-out infinite alternate;
 }
 
 .v-login-panel__header {
-  margin-bottom: 28px;
+  position: relative;
+  margin-bottom: 36px;
   text-align: center;
 }
 
-.v-login-panel__badge {
+.v-login-panel__logo {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
-  padding: 5px 14px;
-  margin-bottom: 18px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
-  letter-spacing: 4px;
-  color: #35e2ff;
-  border: 1px solid rgb(53 226 255 / 35%);
-  border-radius: 999px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  animation: logoPulse 3s ease-in-out infinite;
 }
 
-.v-login-panel__badge::before {
-  width: 6px;
-  height: 6px;
-  background-color: #35e2ff;
-  border-radius: 50%;
-  content: '';
-  box-shadow: 0 0 8px rgb(53 226 255 / 90%);
-  animation: v-panel-blink 1.6s ease-in-out infinite;
+.v-login-panel__logo svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 15px rgb(0 245 255 / 50%));
 }
 
 .v-login-panel__title {
-  margin: 0 0 10px;
-  font-size: 24px;
+  margin: 0 0 8px;
+  font-size: 28px;
   font-weight: 600;
-  letter-spacing: 3px;
-  color: #e6f1ff;
-  text-shadow: 0 0 18px rgb(53 226 255 / 30%);
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 20px rgb(0 245 255 / 30%);
 }
 
 .v-login-panel__subtitle {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 1px;
-  color: #7d92b8;
+  color: rgb(255 255 255 / 50%);
 }
 
-@keyframes v-panel-scan {
+.v-login-panel__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgb(255 255 255 / 30%);
+}
+
+.v-login-panel__dot {
+  width: 6px;
+  height: 6px;
+  background-color: #00f5ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgb(0 245 255 / 80%);
+  animation: dotBlink 2s ease-in-out infinite;
+}
+
+@keyframes borderRotate {
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes glowMove {
   from {
-    transform: translateY(-110%);
+    transform: translate(-10%, -10%);
   }
 
   to {
-    transform: translateY(380%);
+    transform: translate(10%, 10%);
   }
 }
 
-@keyframes v-panel-corner-pulse {
+@keyframes logoPulse {
   0%,
   100% {
-    opacity: 1;
-    box-shadow: 0 0 6px rgb(53 226 255 / 55%);
+    filter: drop-shadow(0 0 15px rgb(0 245 255 / 50%));
+    transform: scale(1);
   }
 
   50% {
-    opacity: 0.35;
-    box-shadow: none;
+    filter: drop-shadow(0 0 25px rgb(0 245 255 / 70%));
+    transform: scale(1.05);
   }
 }
 
-@keyframes v-panel-blink {
+@keyframes dotBlink {
   0%,
   100% {
     opacity: 1;
   }
 
   50% {
-    opacity: 0.25;
+    opacity: 0.3;
   }
 }
 </style>

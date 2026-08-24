@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { reactive, ref, unref } from 'vue'
-import { ElButton, ElCheckbox, ElForm, ElFormItem, ElInput, ElMessage } from 'element-plus'
+import { ElButton, ElCheckbox, ElForm, ElFormItem, ElInput } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useUserStoreWithOut } from '@/stores/modules/user'
 
-const { t } = useI18n('login')
+const { t } = useI18n()
 
 const { getPrefixCls } = useDesign()
 
@@ -34,10 +34,10 @@ const formData = reactive<LoginFormData>({
 })
 
 const rules = reactive<FormRules>({
-  username: [{ required: true, message: t('usernamePlaceholder'), trigger: 'blur' }],
+  username: [{ required: true, message: t('login.usernamePlaceholder'), trigger: 'blur' }],
   password: [
-    { required: true, message: t('passwordPlaceholder'), trigger: 'blur' },
-    { min: 6, message: '密码长度不能少于 6 位', trigger: 'blur' }
+    { required: true, message: t('login.passwordPlaceholder'), trigger: 'blur' },
+    { min: 6, message: t('login.passwordMinLength'), trigger: 'blur' }
   ]
 })
 
@@ -49,19 +49,11 @@ const handleLogin = async () => {
 
   loading.value = true
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1200))
     userStore.setToken(`${formData.username}-${Date.now()}`)
-    ElMessage.success('身份验证成功，正在进入控制台')
     await router.push('/')
   } finally {
     loading.value = false
   }
-}
-
-const oauthChannels = ['微信', '企业微信', '钉钉']
-
-const handleOauth = (channel: string) => {
-  ElMessage.info(`「${channel}」登录通道暂未开放`)
 }
 </script>
 
@@ -69,7 +61,11 @@ const handleOauth = (channel: string) => {
   <div :class="prefixCls">
     <el-form ref="formRef" :model="formData" :rules="rules" size="large" @keyup.enter="handleLogin">
       <el-form-item prop="username">
-        <el-input v-model="formData.username" :placeholder="t('usernamePlaceholder')" clearable>
+        <el-input
+          v-model="formData.username"
+          :placeholder="t('login.usernamePlaceholder')"
+          clearable
+        >
           <template #prefix>
             <svg viewBox="0 0 24 24" :class="`${prefixCls}__icon`">
               <path
@@ -86,7 +82,7 @@ const handleOauth = (channel: string) => {
           v-model="formData.password"
           type="password"
           show-password
-          :placeholder="t('passwordPlaceholder')"
+          :placeholder="t('login.passwordPlaceholder')"
         >
           <template #prefix>
             <svg viewBox="0 0 24 24" :class="`${prefixCls}__icon`">
@@ -100,8 +96,10 @@ const handleOauth = (channel: string) => {
       </el-form-item>
 
       <div :class="`${prefixCls}__options`">
-        <el-checkbox v-model="formData.remember">{{ t('remember') }}</el-checkbox>
-        <a :class="`${prefixCls}__link`" href="javascript:void(0)">{{ t('forgetPassword') }}</a>
+        <el-checkbox v-model="formData.remember">{{ t('login.remember') }}</el-checkbox>
+        <a :class="`${prefixCls}__link`" href="javascript:void(0)">
+          {{ t('login.forgetPassword') }}
+        </a>
       </div>
 
       <el-button
@@ -111,73 +109,53 @@ const handleOauth = (channel: string) => {
         :loading="loading"
         @click="handleLogin"
       >
-        {{ loading ? '验证中' : t('login') }}
+        {{ loading ? t('login.verifying') : t('login.login') }}
       </el-button>
     </el-form>
-
-    <div :class="`${prefixCls}__divider`">
-      <span :class="`${prefixCls}__divider-line`"></span>
-      <span :class="`${prefixCls}__divider-text`">{{ t('otherLogin') }}</span>
-      <span :class="`${prefixCls}__divider-line`"></span>
-    </div>
-
-    <div :class="`${prefixCls}__oauth`">
-      <button
-        v-for="channel in oauthChannels"
-        :key="channel"
-        :class="`${prefixCls}__oauth-btn`"
-        type="button"
-        :title="channel"
-        @click="handleOauth(channel)"
-      >
-        {{ channel.slice(0, 1) }}
-      </button>
-    </div>
   </div>
 </template>
 
 <style scoped>
 .v-login-form__icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 6px;
-  color: rgb(53 226 255 / 75%);
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  color: rgb(0 245 255 / 70%);
   vertical-align: middle;
 }
 
 .v-login-form :deep(.el-input__inner) {
-  height: 40px;
-  color: #d8e9ff;
-  caret-color: #35e2ff;
+  height: 48px;
+  color: #fff;
+  caret-color: #00f5ff;
 }
 
 .v-login-form :deep(.el-input__wrapper) {
-  background-color: rgb(13 28 51 / 65%);
-  border-radius: 3px;
-  box-shadow: 0 0 0 1px rgb(53 226 255 / 22%) inset;
-  transition:
-    box-shadow 0.25s ease,
-    background-color 0.25s ease;
+  background-color: rgb(255 255 255 / 5%);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 10%) inset;
+  transition: all 0.3s ease;
 }
 
 .v-login-form :deep(.el-input__wrapper:hover) {
-  box-shadow: 0 0 0 1px rgb(53 226 255 / 45%) inset;
+  background-color: rgb(255 255 255 / 8%);
+  box-shadow: 0 0 0 1px rgb(0 245 255 / 30%) inset;
 }
 
 .v-login-form :deep(.el-input__wrapper.is-focus) {
-  background-color: rgb(13 28 51 / 85%);
+  background-color: rgb(255 255 255 / 10%);
   box-shadow:
-    0 0 0 1px #35e2ff inset,
-    0 0 14px rgb(53 226 255 / 28%);
+    0 0 0 1px rgb(0 245 255 / 50%) inset,
+    0 0 20px rgb(0 245 255 / 10%);
 }
 
 .v-login-form :deep(.el-input__inner::placeholder) {
-  color: #5c7099;
+  color: rgb(255 255 255 / 30%);
 }
 
 .v-login-form :deep(.el-input__suffix),
 .v-login-form :deep(.el-input__prefix) {
-  color: rgb(53 226 255 / 75%);
+  color: rgb(0 245 255 / 70%);
 }
 
 .v-login-form__options {
@@ -189,105 +167,58 @@ const handleOauth = (channel: string) => {
 
 .v-login-form :deep(.el-checkbox__label) {
   font-size: 13px;
-  color: #7d92b8;
+  color: rgb(255 255 255 / 50%);
 }
 
 .v-login-form :deep(.el-checkbox__inner) {
-  background-color: rgb(13 28 51 / 65%);
-  border-color: rgb(53 226 255 / 35%);
+  background-color: rgb(255 255 255 / 5%);
+  border-color: rgb(255 255 255 / 20%);
 }
 
 .v-login-form :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
-  background-color: #35e2ff;
-  border-color: #35e2ff;
+  background-color: #00f5ff;
+  border-color: #00f5ff;
 }
 
 .v-login-form :deep(.el-checkbox__input.is-checked .el-checkbox__inner::after) {
-  border-color: #04101f;
+  border-color: #050a16;
 }
 
 .v-login-form__link {
   font-size: 13px;
-  color: #35e2ff;
+  color: #00f5ff;
   text-decoration: none;
-  transition: text-shadow 0.25s ease;
+  transition: all 0.3s ease;
 }
 
 .v-login-form__link:hover {
-  text-shadow: 0 0 10px rgb(53 226 255 / 70%);
+  color: #7c5cff;
+  text-shadow: 0 0 10px rgb(124 92 255 / 50%);
 }
 
 .v-login-form__submit {
   width: 100%;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
   letter-spacing: 4px;
-  text-indent: 4px;
-  background-image: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #00f5ff, #7c5cff);
   border: none;
-  border-radius: 3px;
-  box-shadow: 0 0 18px rgb(0 198 255 / 40%);
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgb(0 245 255 / 30%);
+  transition: all 0.3s ease;
 }
 
 .v-login-form__submit:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 6px 26px rgb(0 198 255 / 55%),
-    0 0 14px rgb(0 198 255 / 40%);
+    0 6px 30px rgb(0 245 255 / 40%),
+    0 0 20px rgb(124 92 255 / 30%);
 }
 
 .v-login-form__submit:active {
   transform: translateY(0);
-}
-
-.v-login-form__divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 30px 0 20px;
-}
-
-.v-login-form__divider-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgb(53 226 255 / 35%), transparent);
-}
-
-.v-login-form__divider-text {
-  font-size: 12px;
-  letter-spacing: 2px;
-  color: #5c7099;
-}
-
-.v-login-form__oauth {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.v-login-form__oauth-btn {
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  font-size: 14px;
-  color: #8fa3c8;
-  cursor: pointer;
-  background-color: rgb(13 28 51 / 55%);
-  border: 1px solid rgb(53 226 255 / 25%);
-  border-radius: 50%;
-  outline: none;
-  transition:
-    color 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.25s ease;
-}
-
-.v-login-form__oauth-btn:hover {
-  color: #35e2ff;
-  border-color: #35e2ff;
-  transform: translateY(-3px);
-  box-shadow: 0 0 14px rgb(53 226 255 / 35%);
 }
 </style>
