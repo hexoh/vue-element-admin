@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from '@/hooks/web/useI18n'
 import { useDesign } from '@/hooks/web/useDesign'
+import LogoSvg from '@/assets/login-logo.svg'
 
 const { t } = useI18n()
 
@@ -16,29 +17,7 @@ const prefixCls = getPrefixCls('login-panel')
 
     <header :class="`${prefixCls}__header`">
       <div :class="`${prefixCls}__logo`">
-        <svg viewBox="0 0 100 100" fill="none">
-          <defs>
-            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#00f5ff"></stop>
-              <stop offset="100%" stop-color="#7c5cff"></stop>
-            </linearGradient>
-          </defs>
-          <polygon
-            points="50,10 90,30 90,70 50,90 10,70 10,30"
-            stroke="url(#logo-gradient)"
-            stroke-width="2"
-            fill="rgba(0, 245, 255, 0.05)"
-          />
-          <circle cx="50" cy="50" r="12" fill="url(#logo-gradient)" />
-          <circle
-            cx="50"
-            cy="50"
-            r="20"
-            stroke="rgba(0, 245, 255, 0.3)"
-            stroke-width="1"
-            fill="none"
-          />
-        </svg>
+        <img :src="LogoSvg" alt="logo" />
       </div>
       <h2 :class="`${prefixCls}__title`">{{ t('login.welcome') }}</h2>
       <p :class="`${prefixCls}__subtitle`">{{ t('login.message') }}</p>
@@ -67,6 +46,7 @@ const prefixCls = getPrefixCls('login-panel')
 .v-login-panel__border {
   position: absolute;
   padding: 1px;
+  pointer-events: none;
   background: linear-gradient(
     135deg,
     rgb(0 245 255 / 50%),
@@ -79,11 +59,6 @@ const prefixCls = getPrefixCls('login-panel')
   mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: xor;
-  mask-composite: exclude;
 }
 
 .v-login-panel__glow {
@@ -113,7 +88,7 @@ const prefixCls = getPrefixCls('login-panel')
   animation: logoPulse 3s ease-in-out infinite;
 }
 
-.v-login-panel__logo svg {
+.v-login-panel__logo img {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 0 15px rgb(0 245 255 / 50%));

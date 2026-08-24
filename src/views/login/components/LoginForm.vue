@@ -42,6 +42,7 @@ const rules = reactive<FormRules>({
 })
 
 const handleLogin = async () => {
+  console.log('handleLogin')
   const form = unref(formRef)
   if (!form) return
   const valid = await form.validate().catch(() => false)
