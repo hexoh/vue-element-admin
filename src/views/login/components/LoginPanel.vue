@@ -59,6 +59,7 @@ const prefixCls = getPrefixCls('login-panel')
   mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
+  mask-composite: exclude;
 }
 
 .v-login-panel__glow {
