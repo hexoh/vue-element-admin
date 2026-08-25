@@ -98,6 +98,58 @@ CLIENT-TEMPLATE/
 
 开发前请仔细阅读本章，有助于您了解本项目中使用的工具以及提高开发效率。
 
+## 文件名称命名规范
+
+### 项目各目录文件命名规范
+
+| 风格 | 典型文件 | 为什么这样命？（底层逻辑） |
+| --- | --- | --- |
+| `PascalCase` (大驼峰) | UserCard.vue<br>LoginView.vue | 组件/类：文件导出一个 UI 组件或类（面向对象/模板结构）。 |
+| `camelCase` (小驼峰) | useLocal.ts<br>formatDate.ts | 函数/变量/实例：文件导出一个具体的函数、Hook 或实例对象。 |
+| `kebab-case` (短横线) | element-plus.ts<br>bg-banner.png | 第三方包配置/静态资源/URL映射：npm 包名全都是短横线规范，资源和 URL 路径也是小写短横线。 |
+
+```text
+src/
+├── api/                  #【camelCase】业务模块接口 (user.ts, orderApi.ts)
+├── assets/               #【kebab-case】静态资源 (logo-small.png, bg-banner.jpg)
+├── components/           #【PascalCase】可复用组件 (AppHeader.vue, BaseButton.vue)
+├── composables/ (hooks/) #【camelCase】组合式函数 (useAuth.ts, useLocalStorage.ts)
+├── plugins/              #【kebab-case】插件包装 (element-plus.ts, vue-i18n.ts)
+├── router/               #【camelCase】路由配置 (index.ts, routes.ts)
+├── stores/               #【camelCase】Pinia Store (useUserStore.ts 或 user.ts)
+├── types/                #【camelCase】类型声明 (apiResponse.d.ts, user.ts)
+├── utils/                #【camelCase】纯 JS 工具函数 (formatDate.ts, request.ts)
+└── views/                #【PascalCase】页面级组件 (HomeView.vue, UserProfile.vue)
+```
+
+### 文件夹命名规范
+
+在 src/views/（或 src/pages/）下，**文件夹的命名强烈推荐一律使用 kebab-case（全小写 + 单词间短横线）**。
+
+例如：
+
+- 单单词：views/home/、views/login/、views/dashboard/
+- 多单词：views/user-management/、views/order-detail/、views/system-setting/
+
+```text
+src/views/
+├── login/
+│   ├── LoginView.vue          # 主页面组件（大驼峰）
+│   ├── components/            # 只有登录页自己用的专属子组件
+│   │   ├── LoginForm.vue
+│   │   └── LoginPhoneModal.vue
+│   └── useLogin.ts            # 登录页专属的逻辑 hook（小驼峰）
+│
+├── user-management/           # 多单词文件夹用 kebab-case
+│   ├── UserList.vue           # 列表页
+│   ├── UserDetail.vue         # 详情页
+│   └── components/
+│       └── UserStatusBadge.vue
+│
+└── home/
+    └── HomeView.vue
+```
+
 ## 项目开发工具库
 
 ### Commitlint
