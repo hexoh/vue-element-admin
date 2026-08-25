@@ -6,18 +6,29 @@ const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('login-bg')
 
-interface Particle {
+interface Node {
   x: number
   y: number
   vx: number
   vy: number
   radius: number
-  color: string
+  baseRadius: number
+  hue: number
 }
 
-const LINK_DISTANCE = 120
-const MOUSE_DISTANCE = 150
-const MAX_SPEED = 0.8
+interface Hexagon {
+  x: number
+  y: number
+  size: number
+  rotation: number
+  rotationSpeed: number
+  opacity: number
+  hue: number
+}
+
+const CONNECT_DISTANCE = 150
+const MOUSE_INFLUENCE = 200
+const MAX_SPEED = 0.5
 
 const canvasRef = ref<HTMLCanvasElement>()
 
@@ -25,20 +36,33 @@ let ctx: CanvasRenderingContext2D | null = null
 let animationId = 0
 let width = 0
 let height = 0
-let particles: Particle[] = []
+let nodes: Node[] = []
+let hexagons: Hexagon[] = []
 const mouse = { x: -9999, y: -9999 }
 
-const colors = ['rgba(0, 245, 255, 0.7)', 'rgba(124, 92, 255, 0.7)', 'rgba(255, 255, 255, 0.5)']
-
-const createParticles = (): Particle[] => {
-  const count = Math.min(100, Math.floor((width * height) / 18000))
+const createNodes = (): Node[] => {
+  const count = Math.min(80, Math.floor((width * height) / 20000))
   return Array.from({ length: count }, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
-    vx: (Math.random() - 0.5) * 0.5,
-    vy: (Math.random() - 0.5) * 0.5,
-    radius: Math.random() * 2 + 0.5,
-    color: colors[Math.floor(Math.random() * colors.length)] as string
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    radius: Math.random() * 2 + 1,
+    baseRadius: Math.random() * 2 + 1,
+    hue: Math.random() * 60 + 180
+  }))
+}
+
+const createHexagons = (): Hexagon[] => {
+  const count = Math.min(12, Math.floor((width * height) / 80000))
+  return Array.from({ length: count }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    size: Math.random() * 60 + 30,
+    rotation: Math.random() * Math.PI * 2,
+    rotationSpeed: (Math.random() - 0.5) * 0.003,
+    opacity: Math.random() * 0.15 + 0.05,
+    hue: Math.random() * 60 + 180
   }))
 }
 
@@ -51,7 +75,8 @@ const resize = () => {
   canvas.width = width * dpr
   canvas.height = height * dpr
   ctx?.setTransform(dpr, 0, 0, dpr, 0, 0)
-  particles = createParticles()
+  nodes = createNodes()
+  hexagons = createHexagons()
 }
 
 const handleMouseMove = (event: MouseEvent) => {
@@ -64,61 +89,151 @@ const handleMouseLeave = () => {
   mouse.y = -9999
 }
 
-const render = () => {
+const drawHexagon = (hex: Hexagon) => {
+  if (!ctx) return
+  ctx.save()
+  ctx.translate(hex.x, hex.y)
+  ctx.rotate(hex.rotation)
+
+  ctx.beginPath()
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 3) * i
+    const x = hex.size * Math.cos(angle)
+    const y = hex.size * Math.sin(angle)
+    if (i === 0) ctx.moveTo(x, y)
+    else ctx.lineTo(x, y)
+  }
+  ctx.closePath()
+
+  ctx.strokeStyle = `hsla(${hex.hue}, 80%, 60%, ${hex.opacity})`
+  ctx.lineWidth = 1
+  ctx.stroke()
+
+  ctx.restore()
+}
+
+const drawNodes = () => {
+  if (!ctx) return
+
+  for (const node of nodes) {
+    const dx = mouse.x - node.x
+    const dy = mouse.y - node.y
+    const dist = Math.hypot(dx, dy)
+
+    if (dist < MOUSE_INFLUENCE && dist > 0.01) {
+      const force = (1 - dist / MOUSE_INFLUENCE) * 0.02
+      node.vx += (dx / dist) * force
+      node.vy += (dy / dist) * force
+    }
+
+    const speed = Math.hypot(node.vx, node.vy)
+    if (speed > MAX_SPEED) {
+      node.vx = (node.vx / speed) * MAX_SPEED
+      node.vy = (node.vy / speed) * MAX_SPEED
+    }
+
+    node.x += node.vx
+    node.y += node.vy
+
+    if (node.x < 0) node.x = width
+    if (node.x > width) node.x = 0
+    if (node.y < 0) node.y = height
+    if (node.y > height) node.y = 0
+
+    const glow = dist < MOUSE_INFLUENCE ? (1 - dist / MOUSE_INFLUENCE) * 0.5 : 0
+    node.radius = node.baseRadius + glow * 3
+
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2)
+    ctx.fillStyle = `hsla(${node.hue}, 80%, 70%, ${0.7 + glow * 0.3})`
+    ctx.shadowColor = `hsla(${node.hue}, 80%, 60%, 0.8)`
+    ctx.shadowBlur = 10 + glow * 15
+    ctx.fill()
+    ctx.shadowBlur = 0
+  }
+}
+
+const drawConnections = () => {
+  if (!ctx) return
+
+  for (let i = 0; i < nodes.length; i++) {
+    const a = nodes[i]!
+    for (let j = i + 1; j < nodes.length; j++) {
+      const b = nodes[j]!
+      const dist = Math.hypot(a.x - b.x, a.y - b.y)
+
+      if (dist >= CONNECT_DISTANCE) continue
+
+      const alpha = (1 - dist / CONNECT_DISTANCE) * 0.4
+      const hue = (a.hue + b.hue) / 2
+
+      ctx.beginPath()
+      ctx.moveTo(a.x, a.y)
+      ctx.lineTo(b.x, b.y)
+      ctx.strokeStyle = `hsla(${hue}, 70%, 60%, ${alpha})`
+      ctx.lineWidth = 0.8
+      ctx.stroke()
+    }
+
+    const distToMouse = Math.hypot(mouse.x - a.x, mouse.y - a.y)
+    if (distToMouse < MOUSE_INFLUENCE) {
+      const alpha = (1 - distToMouse / MOUSE_INFLUENCE) * 0.5
+      ctx.beginPath()
+      ctx.moveTo(a.x, a.y)
+      ctx.lineTo(mouse.x, mouse.y)
+      ctx.strokeStyle = `hsla(${a.hue}, 80%, 65%, ${alpha})`
+      ctx.lineWidth = 1
+      ctx.stroke()
+    }
+  }
+}
+
+const drawAmbientGlow = (time: number) => {
+  if (!ctx) return
+
+  const pulse1 = Math.sin(time * 0.0005) * 0.5 + 0.5
+  const pulse2 = Math.sin(time * 0.0007 + 1) * 0.5 + 0.5
+
+  const gradient1 = ctx.createRadialGradient(
+    width * 0.2,
+    height * 0.3,
+    0,
+    width * 0.2,
+    height * 0.3,
+    width * 0.5
+  )
+  gradient1.addColorStop(0, `rgba(0, 200, 255, ${0.03 + pulse1 * 0.02})`)
+  gradient1.addColorStop(1, 'rgba(0, 200, 255, 0)')
+  ctx.fillStyle = gradient1
+  ctx.fillRect(0, 0, width, height)
+
+  const gradient2 = ctx.createRadialGradient(
+    width * 0.8,
+    height * 0.7,
+    0,
+    width * 0.8,
+    height * 0.7,
+    width * 0.4
+  )
+  gradient2.addColorStop(0, `rgba(140, 100, 255, ${0.025 + pulse2 * 0.015})`)
+  gradient2.addColorStop(1, 'rgba(140, 100, 255, 0)')
+  ctx.fillStyle = gradient2
+  ctx.fillRect(0, 0, width, height)
+}
+
+const render = (time: number) => {
   if (!ctx) return
   ctx.clearRect(0, 0, width, height)
 
-  for (const p of particles) {
-    const dx = mouse.x - p.x
-    const dy = mouse.y - p.y
-    const distance = Math.hypot(dx, dy)
-    if (distance < MOUSE_DISTANCE && distance > 0.01) {
-      p.vx += (dx / distance) * 0.01
-      p.vy += (dy / distance) * 0.01
-    }
-    const speed = Math.hypot(p.vx, p.vy)
-    if (speed > MAX_SPEED) {
-      p.vx = (p.vx / speed) * MAX_SPEED
-      p.vy = (p.vy / speed) * MAX_SPEED
-    }
-    p.x += p.vx
-    p.y += p.vy
-    if (p.x <= 0 || p.x >= width) p.vx *= -1
-    if (p.y <= 0 || p.y >= height) p.vy *= -1
+  drawAmbientGlow(time)
 
-    ctx.beginPath()
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-    ctx.fillStyle = p.color
-    ctx.fill()
+  for (const hex of hexagons) {
+    hex.rotation += hex.rotationSpeed
+    drawHexagon(hex)
   }
 
-  for (let i = 0; i < particles.length; i++) {
-    const current = particles[i]
-    if (!current) continue
-
-    for (let j = i + 1; j < particles.length; j++) {
-      const other = particles[j]
-      if (!other) continue
-      const distance = Math.hypot(current.x - other.x, current.y - other.y)
-      if (distance >= LINK_DISTANCE) continue
-      ctx.beginPath()
-      ctx.moveTo(current.x, current.y)
-      ctx.lineTo(other.x, other.y)
-      ctx.strokeStyle = `rgba(0, 245, 255, ${0.2 * (1 - distance / LINK_DISTANCE)})`
-      ctx.lineWidth = 0.5
-      ctx.stroke()
-    }
-
-    const mDistance = Math.hypot(mouse.x - current.x, mouse.y - current.y)
-    if (mDistance < MOUSE_DISTANCE) {
-      ctx.beginPath()
-      ctx.moveTo(current.x, current.y)
-      ctx.lineTo(mouse.x, mouse.y)
-      ctx.strokeStyle = `rgba(0, 245, 255, ${0.3 * (1 - mDistance / MOUSE_DISTANCE)})`
-      ctx.lineWidth = 0.6
-      ctx.stroke()
-    }
-  }
+  drawConnections()
+  drawNodes()
 
   animationId = requestAnimationFrame(render)
 }
@@ -145,9 +260,7 @@ onBeforeUnmount(() => {
 <template>
   <div :class="prefixCls">
     <canvas ref="canvasRef" :class="`${prefixCls}__canvas`"></canvas>
-    <div :class="`${prefixCls}__gradient`"></div>
-    <div :class="[`${prefixCls}__orb`, `${prefixCls}__orb--1`]"></div>
-    <div :class="[`${prefixCls}__orb`, `${prefixCls}__orb--2`]"></div>
+    <div :class="`${prefixCls}__overlay`"></div>
   </div>
 </template>
 
@@ -157,7 +270,7 @@ onBeforeUnmount(() => {
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background-color: #050a16;
+  background: linear-gradient(135deg, #0a0f1a 0%, #0d1525 50%, #0a0f1a 100%);
 }
 
 .v-login-bg__canvas {
@@ -169,45 +282,10 @@ onBeforeUnmount(() => {
   height: 100%;
 }
 
-.v-login-bg__gradient {
+.v-login-bg__overlay {
   position: absolute;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 0%, rgb(5 10 22 / 80%) 100%);
   inset: 0;
-}
-
-.v-login-bg__orb {
-  position: absolute;
   pointer-events: none;
-  border-radius: 50%;
-  filter: blur(80px);
-}
-
-.v-login-bg__orb--1 {
-  top: -20%;
-  left: -10%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgb(0 245 255 / 15%), transparent 70%);
-  animation: orbFloat 12s ease-in-out infinite alternate;
-}
-
-.v-login-bg__orb--2 {
-  right: -15%;
-  bottom: -25%;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgb(124 92 255 / 12%), transparent 70%);
-  animation: orbFloat 16s ease-in-out infinite alternate-reverse;
-}
-
-@keyframes orbFloat {
-  from {
-    transform: translate(0, 0) scale(1);
-  }
-
-  to {
-    transform: translate(50px, 40px) scale(1.1);
-  }
+  background: radial-gradient(ellipse at center, transparent 40%, rgb(8 12 21 / 60%) 100%);
 }
 </style>
