@@ -45,7 +45,7 @@ pnpm run build
 - **`ESLint`** (生态完善，插件功能强大)
 - **`Oxlint`** (比 `ESLint` 快 **50-100** 倍)
 
-`Oxlint` 虽然比 `ESLint` 快 **50-100** 倍，但是由于目前生态不太完善，所以官方建议开发者先运行 `Oxlint`，然后在 `lint-staged` 或 `CI` 设置中运行 `ESLint`。这样，大多数常见问题在到达 `ESLint` 之前就被 `Oxlint` 阻止了。种方法可以显著提高 `lint` 过程的速度。
+`Oxlint` 虽然比 `ESLint` 快 **50-100** 倍，但是由于目前生态不太完善，所以官方建议开发者先运行 `Oxlint`，然后在 `lint-staged` 或 `CI` 设置中运行 `ESLint`。这样，大多数常见问题在到达 `ESLint` 之前就被 `Oxlint` 阻止了。这种方法可以显著提高 `lint` 过程的速度。
 
 ## 代码格式化
 
@@ -70,12 +70,19 @@ CLIENT-TEMPLATE/
 │   ├── api                       # 接口文件夹
 │   ├── assets                    # 静态目录文件(需要编译的文件)
 │   │   ├── images                # 图片文件夹
-│   │   └── icons                  # SVG以及Icon文件夹
+│   │   └── icons                 # SVG以及Icon文件夹
 │   ├── components                # 公共组件库
 │   ├── composables               # 公共组合式函数
+│   ├── constants                 # 常量文件夹
+│   ├── directives                # 指令文件夹
+│   ├── hooks                     # 钩子函数文件夹
+│   ├── layout                    # 布局
+│   ├── locales                   # 国际化
+│   ├── plugins                   # 插件
 │   ├── router                    # 路由
 │   ├── stores                    # 状态管理
 │   ├── styles                    # 样式文件夹
+│   ├── utils                     # 工具函数
 │   ├── views                     # 页面级组件
 │   ├── App.vue                   # 根组件文件
 │   └── main.ts                   # 启动入口文件

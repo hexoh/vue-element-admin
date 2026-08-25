@@ -24,7 +24,8 @@
     "lint:style": "stylelint --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.ts",
     "format": "prettier --write --experimental-cli --log-level warn \"src/**/*.{js,ts,json,tsx,css,less,vue,html,md}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "p": "plop"
   },
   "dependencies": {
     "@vueuse/core": "^14.4.0",
@@ -73,6 +74,7 @@
     "lint-staged": "^16.2.7",
     "npm-run-all2": "^8.0.4",
     "oxlint": "~1.35.0",
+    "plop": "^4.0.5",
     "postcss": "^8.5.6",
     "postcss-html": "^1.8.1",
     "prettier": "3.7.4",
