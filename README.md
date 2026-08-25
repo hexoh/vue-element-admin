@@ -159,6 +159,35 @@ src/views/
 
 ## 项目开发工具库
 
+### Plop 脚手架生成器
+
+Plop 是一个基于 `Node.js` 的‌ **`微型代码生成工具‌`**（常被称为“脚手架生成器”），专为前端工程化设计，用于通过预定义模板快速、规范地批量生成重复性代码结构（如组件、页面、模块、测试文件等）。
+
+此项目中已经集成 `Plop` 用于生成 **`component`** 和 **`view`** , 创建文件时建议使用此命令进行创建 **`component`** 和 **`view`** 以保持文件文件统一。
+
+使用方法：
+
+1.运行命令
+
+```shell
+pnpm run p
+```
+
+2.选择 **`component`** 或 **`view`**
+
+```text
+$ plop
+? [PLOP] Please choose a generator. (Use arrow keys)
+❯ view - Create vue view
+  component - Create vue component
+```
+
+3.输入 **`component`** 或 **`view`** 名称
+
+**名称的规范必须是 `kebab-case` 规范，如：login、user-management**
+
+如果是子文件夹可以输入 `/`，如：user/detail
+
 ### Commitlint
 
 本项目集成 **`commitlint`** 插件，提代码时描述必须严格按照格式添加前缀，否则会提交失败。
