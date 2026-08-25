@@ -169,6 +169,8 @@ const count = ref<number>(0)
 </template>
 ```
 
+因为自动导入图标需要我们在页面中使用或者是本地添加，但是在某些没有网络的环境中我们可能需要提前将图标引用进去（因为离线网络无法使用在线图标会导致图标显示异常）。
+
 ### [UnoCSS](https://unocss.dev/guide/)
 
 使用 `UnoCSS` 会大大减少 `CSS` 样式的编码，本项目中已经添加了官方的 [`Wind4 preset`](https://unocss.dev/presets/wind4) 预设。修改预设样式可以在 `uno.config.ts` 文件中修改。

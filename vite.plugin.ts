@@ -67,7 +67,7 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
         IconsResolver({
           prefix: 'icon', // 自定义图标组件前缀，默认是 'i'，这里改为 'icon' 以防冲突
           // 可以选择开启 collection 限制，比如只允许 mdi 和 ep (Element Plus)
-          enabledCollections: ['local']
+          enabledCollections: ['local', 'ep']
         }),
         ElementPlusResolver() // 自动注册 Element Plus 组件
       ],

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from '@/hooks/web/useI18n'
 import { useDesign } from '@/hooks/web/useDesign'
-import LogoSvg from '@/assets/login-logo.svg'
 
 const { t } = useI18n()
 
@@ -17,7 +16,7 @@ const prefixCls = getPrefixCls('login-panel')
 
     <header :class="`${prefixCls}__header`">
       <div :class="`${prefixCls}__logo`">
-        <img :src="LogoSvg" alt="logo" />
+        <icon-local-login-logo />
       </div>
       <h2 :class="`${prefixCls}__title`">{{ t('login.welcome') }}</h2>
       <p :class="`${prefixCls}__subtitle`">{{ t('login.message') }}</p>
@@ -89,7 +88,7 @@ const prefixCls = getPrefixCls('login-panel')
   animation: logoPulse 3s ease-in-out infinite;
 }
 
-.v-login-panel__logo img {
+.v-login-panel__logo :deep(svg) {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 0 15px rgb(0 245 255 / 50%));
