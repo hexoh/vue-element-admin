@@ -35,6 +35,19 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
+    },
+
+    optimizeDeps: {
+      include: [
+        'vue',
+        'vue-router',
+        'vue-types',
+        'element-plus/es/locale/lang/zh-cn',
+        'element-plus/es/locale/lang/en',
+        '@vueuse/core',
+        'axios',
+        'qs'
+      ]
     }
   }
 }

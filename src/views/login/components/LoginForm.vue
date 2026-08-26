@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { reactive, ref, unref } from 'vue'
 import { ElButton, ElCheckbox, ElForm, ElFormItem, ElInput } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useUserStoreWithOut } from '@/stores/modules/user'
+import { useValidator } from '@/hooks/web/useValidator'
 
 const { t } = useI18n()
+
+const { required, lengthRange } = useValidator()
 
 const { getPrefixCls } = useDesign()
 
@@ -23,26 +25,22 @@ interface LoginFormData {
   remember: boolean
 }
 
-const formRef = ref<FormInstance>()
+const formRef = useTemplateRef<FormInstance>('formRef')
 
 const loading = ref(false)
 
+const rules = reactive<FormRules>({
+  username: [required()],
+  password: [required(), lengthRange({ min: 1, max: 20 })]
+})
+
 const formData = reactive<LoginFormData>({
   username: 'admin',
-  password: '123456',
+  password: 'admin',
   remember: true
 })
 
-const rules = reactive<FormRules>({
-  username: [{ required: true, message: t('login.usernamePlaceholder'), trigger: 'blur' }],
-  password: [
-    { required: true, message: t('login.passwordPlaceholder'), trigger: 'blur' },
-    { min: 6, message: t('login.passwordMinLength'), trigger: 'blur' }
-  ]
-})
-
 const handleLogin = async () => {
-  console.log('handleLogin')
   const form = unref(formRef)
   if (!form) return
   const valid = await form.validate().catch(() => false)
