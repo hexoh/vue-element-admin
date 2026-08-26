@@ -184,9 +184,9 @@ $ plop
 
 3.输入 **`component`** 或 **`view`** 名称
 
-**名称的规范必须是 `kebab-case` 规范，如：login、user-management**
+- **名称的规范必须是 `kebab-case` 规范，如：login、user-management**
 
-如果是子文件夹可以输入 `/`，如：user/detail
+- 如果是子文件夹可以输入 `/`，如：user/detail
 
 ### Commitlint
 

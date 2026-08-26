@@ -2,6 +2,7 @@
   "extends": "@tsconfig/node24/tsconfig.json",
   "include": [
     "vite.config.*",
+    "vite.*.ts",
     "vitest.config.*",
     "cypress.config.*",
     "nightwatch.conf.*",
@@ -10,7 +11,11 @@
     "commitlint.config.*",
     "prettier.config.*",
     "vite.build.ts",
-    "vite.plugin.ts"
+    "vite.plugin.ts",
+    "plopfile.ts",
+    "postcss.config.ts",
+    "stylelint.config.ts",
+    "uno.config.ts"
   ],
   "compilerOptions": {
     "noEmit": true,
