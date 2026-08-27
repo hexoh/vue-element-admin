@@ -6,6 +6,7 @@ import { useI18n } from '@/hooks/web/useI18n'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useUserStoreWithOut } from '@/stores/modules/user'
 import { useValidator } from '@/hooks/web/useValidator'
+import { loginApi } from '@/api/login'
 
 const { t } = useI18n()
 
@@ -48,8 +49,12 @@ const handleLogin = async () => {
 
   loading.value = true
   try {
+    const res = await loginApi(formData)
+    console.log('login res', res)
     userStore.setToken(`${formData.username}-${Date.now()}`)
     await router.push('/')
+  } catch (error) {
+    console.error('login error', error)
   } finally {
     loading.value = false
   }

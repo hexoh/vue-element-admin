@@ -1,4 +1,4 @@
-import { SUCCESS_CODE } from '@/constants'
+import { SUCCESS_CODE } from '../../src/constants'
 
 const timeout = 1000
 

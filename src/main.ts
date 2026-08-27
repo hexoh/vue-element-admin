@@ -3,6 +3,9 @@ import 'vue/jsx'
 // 引入 UnoCSS
 import '@/plugins/unocss'
 
+// 引入Mock
+import '@/plugins/mock'
+
 // 引入动画
 import '@/plugins/animate'
 

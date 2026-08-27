@@ -13,6 +13,7 @@ import ServerUrlCopy from 'vite-plugin-url-copy'
 import progress from 'vite-plugin-progress'
 import { formatISO } from 'date-fns'
 import { ViteEjsPlugin } from 'vite-plugin-ejs'
+import { viteMockServe } from 'vite-plugin-mock'
 import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import'
 import EslintPlugin from 'vite-plugin-eslint2'
 import UnoCSS from 'unocss/vite'
@@ -85,6 +86,13 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
         )
       },
       autoInstall: true // 自动安装检测到的图标集（如果有未安装的，会自动用包管理器安装）
+    }),
+
+    // 配置Mock
+    viteMockServe({
+      ignore: /^_/,
+      mockPath: 'mock',
+      enable: env.VITE_USE_MOCK === 'true'
     }),
 
     /** 将 SVG 静态图转化为 Vue 组件 */
