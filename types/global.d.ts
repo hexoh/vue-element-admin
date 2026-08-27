@@ -1,6 +1,10 @@
 import type { RawAxiosRequestHeaders } from 'axios'
 
 declare global {
+  interface Fn<T = any> {
+    (...arg: T[]): T
+  }
+
   type Nullable<T> = T | null
 
   type ElRef<T extends HTMLElement = HTMLDivElement> = Nullable<T>
