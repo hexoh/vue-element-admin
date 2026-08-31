@@ -6,6 +6,9 @@ import pluginVitest from '@vitest/eslint-plugin'
 import pluginOxlint from 'eslint-plugin-oxlint'
 import eslintConfigPrettier from 'eslint-config-prettier' // 禁用冲突规则
 import eslintPluginPrettier from 'eslint-plugin-prettier' // 集成 Prettier
+// vue文件解析器
+import vueParser from 'vue-eslint-parser'
+import tseslint from 'typescript-eslint'
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
@@ -36,6 +39,17 @@ export default defineConfigWithVueTs(
   {
     plugins: {
       prettier: eslintPluginPrettier
+    },
+    languageOptions: {
+      parser: vueParser, // 使用vue解析器，这个可以识别vue文件
+      parserOptions: {
+        parser: tseslint.parser, // 在vue文件上使用ts解析器
+        sourceType: 'module',
+        ecmaVersion: 2020,
+        ecmaFeatures: {
+          jsx: true
+        }
+      }
     },
     rules: {
       // 启用 Prettier 格式化规则

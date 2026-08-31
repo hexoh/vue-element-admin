@@ -241,7 +241,8 @@ export default {
           {
             ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted']
           }
-        ]
+        ],
+        'declaration-property-value-no-unknown': null
       }
     }
   ]
