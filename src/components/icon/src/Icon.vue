@@ -78,14 +78,14 @@ const getIconName = computed(() => {
 .iconify {
   :deep(svg) {
     &:hover {
-      color: v-bind(hovercolor) !important;
+      color: v-bind(hoverColor) !important;
     }
   }
 }
 
 .iconify {
   &:hover {
-    color: v-bind(hovercolor) !important;
+    color: v-bind(hoverColor) !important;
   }
 }
 </style>
