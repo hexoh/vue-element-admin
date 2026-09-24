@@ -11,6 +11,8 @@ declare global {
 
   type Recordable<T = any, K = string> = Record<K extends null | undefined ? string : K, T>
 
+  type ComponentRef<T> = InstanceType<T>
+
   type LocaleType = 'zh-CN' | 'en'
 
   type LayoutType = 'classic' | 'topLeft' | 'top' | 'cutMenu'
