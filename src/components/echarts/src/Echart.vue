@@ -1,0 +1,127 @@
+<script setup lang="ts">
+import type { EChartsOption } from 'echarts'
+import echarts from '@/plugins/echart'
+import { debounce } from 'lodash-es'
+import 'echarts-wordcloud'
+import { propTypes } from '@/utils/propTypes'
+import {
+  computed,
+  type PropType,
+  ref,
+  unref,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+  onActivated
+} from 'vue'
+import { useAppStore } from '@/stores/modules/app'
+import { isString } from '@/utils/is'
+import { useDesign } from '@/hooks/web/useDesign'
+
+const { getPrefixCls, variables } = useDesign()
+
+const prefixCls = getPrefixCls('echart')
+
+const appStore = useAppStore()
+
+const props = defineProps({
+  options: {
+    type: Object as PropType<EChartsOption>,
+    required: true
+  },
+  width: propTypes.oneOfType([Number, String]).def('100%'),
+  height: propTypes.oneOfType([Number, String]).def('500px')
+})
+
+const isDark = computed(() => appStore.getIsDark)
+
+const theme = computed<EChartsOption['darkMode']>(() => {
+  return unref(isDark) ? true : 'auto'
+})
+
+const options = computed(() => {
+  return {
+    ...props.options,
+    darkMode: unref(theme)
+  }
+})
+
+const elRef = ref<ElRef>()
+
+let echartRef: Nullable<echarts.ECharts> = null
+
+const contentEl = ref<Element>()
+
+const styles = computed(() => {
+  const width = isString(props.width) ? props.width : `${props.width}px`
+  const height = isString(props.height) ? props.height : `${props.height}px`
+
+  return {
+    width,
+    height
+  }
+})
+
+const initChart = () => {
+  if (unref(elRef) && props.options) {
+    echartRef = echarts.init(unref(elRef) as HTMLElement)
+    echartRef?.setOption(unref(options))
+  }
+}
+
+watch(
+  () => options.value,
+  (options) => {
+    if (echartRef) {
+      echartRef?.setOption(options)
+    }
+  },
+  {
+    deep: true
+  }
+)
+
+const resizeHandler = debounce(() => {
+  if (echartRef) {
+    echartRef.resize()
+  }
+}, 100)
+
+const contentResizeHandler = (e: Event) => {
+  if (e instanceof TransitionEvent && e.propertyName === 'width') {
+    resizeHandler()
+  }
+}
+
+onMounted(() => {
+  setTimeout(() => {
+    initChart()
+  }, 0)
+
+  window.addEventListener('resize', resizeHandler)
+
+  contentEl.value = document.getElementsByClassName(`${variables.namespace}-layout-content`)[0]
+  const el = unref(contentEl)
+  if (el) {
+    el.addEventListener('transitionend', contentResizeHandler)
+  }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', resizeHandler)
+  const el = unref(contentEl)
+  if (el) {
+    el.removeEventListener('transitionend', contentResizeHandler)
+  }
+})
+
+onActivated(() => {
+  if (echartRef) {
+    echartRef.resize()
+  }
+})
+</script>
+
+<template>
+  <div ref="elRef" :class="[$attrs.class, prefixCls]" :style="styles"></div>
+</template>

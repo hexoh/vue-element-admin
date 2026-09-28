@@ -34,6 +34,8 @@
     "axios": "^1.19.0",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
+    "echarts": "^6.1.0",
+    "echarts-wordcloud": "^2.1.0",
     "element-plus": "^2.13.0",
     "lodash-es": "^4.18.1",
     "nprogress": "^0.2.0",
