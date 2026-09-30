@@ -1,4 +1,11 @@
 /**
+ * 首字母大写
+ */
+export function firstUpperCase(str: string) {
+  return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+}
+
+/**
  * 把对象转为formData
  */
 export function objToFormData(obj: Recordable) {

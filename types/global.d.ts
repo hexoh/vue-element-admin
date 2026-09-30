@@ -17,6 +17,11 @@ declare global {
 
   type LocaleType = 'zh-CN' | 'en'
 
+  type TimeoutHandle = ReturnType<typeof setTimeout>
+  type IntervalHandle = ReturnType<typeof setInterval>
+
+  type ElementPlusInfoType = 'success' | 'info' | 'warning' | 'danger'
+
   type LayoutType = 'classic' | 'topLeft' | 'top' | 'cutMenu'
 
   /** axios content */
