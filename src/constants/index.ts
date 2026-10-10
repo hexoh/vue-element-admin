@@ -32,3 +32,8 @@ export const TRANSFORM_REQUEST_DATA = true
  * 全局图标前缀
  */
 export const ICON_PREFIX = 'vi-'
+
+/**
+ * 表格默认过滤列设置字段
+ */
+export const DEFAULT_FILTER_COLUMN = ['expand', 'selection']
