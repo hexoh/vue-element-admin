@@ -39,6 +39,7 @@
     "cropperjs": "^2.2.0",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.23",
     "echarts": "^6.1.0",
     "echarts-wordcloud": "^2.1.0",
     "element-plus": "^2.13.0",
