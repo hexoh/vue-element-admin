@@ -5,8 +5,8 @@ import { useDesign } from '@/hooks/web/useDesign'
 import LockDialog from './components/LockDialog.vue'
 import { ref, computed } from 'vue'
 import LockPage from './components/LockPage.vue'
-import { useLockStore } from '@/store/modules/lock'
-import { useUserStore } from '@/store/modules/user'
+import { useLockStore } from '@/stores/modules/lock'
+import { useUserStore } from '@/stores/modules/user'
 import { useRouter } from 'vue-router'
 
 const { push } = useRouter()
