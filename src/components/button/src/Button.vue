@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { useDesign } from '@/hooks/web/useDesign'
-import { ElButton, type ComponentSize, type ButtonType } from 'element-plus'
+import {
+  ElButton,
+  type ComponentSize,
+  type ButtonType,
+  buttonEmits,
+  buttonProps
+} from 'element-plus'
+
 import { type PropType, type Component, computed, unref } from 'vue'
 import { useAppStore } from '@/stores/modules/app'
 
@@ -13,6 +20,7 @@ const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('button')
 
 const props = defineProps({
+  ...buttonProps,
   size: {
     type: String as PropType<ComponentSize>,
     default: undefined
@@ -87,7 +95,7 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['click'])
+const emits = defineEmits(buttonEmits)
 
 const color = computed(() => {
   const { type, link } = props
@@ -112,7 +120,7 @@ const style = computed(() => {
     v-bind="{ ...props }"
     :color="color"
     :style="style"
-    @click="() => emits('click')"
+    @click="(evt) => emits('click', evt)"
   >
     <slot></slot>
     <slot name="icon"></slot>
