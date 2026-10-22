@@ -96,7 +96,16 @@ export function createVitePluginConfig(env: Record<string, string>): PluginOptio
     }),
 
     /** 将 SVG 静态图转化为 Vue 组件 */
-    svgLoader({ defaultImport: 'url' }),
+    svgLoader({
+      defaultImport: 'url',
+      svgoConfig: {
+        plugins: [
+          'preset-default',
+          // 给没有 fill 的 svg 补 currentColor，保持与 unplugin-icons 本地图标一致的着色行为
+          { name: 'addAttributesToSVGElement', params: { attributes: [{ fill: 'currentColor' }] } }
+        ]
+      }
+    }),
     /** 修改标题 */
     ViteEjsPlugin({
       title: env.VITE_APP_TITLE

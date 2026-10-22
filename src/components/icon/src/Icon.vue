@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { shallowRef, markRaw, watchEffect, computed } from 'vue'
+import { shallowRef, markRaw, watchEffect, computed, type Component } from 'vue'
 import { ElIcon } from 'element-plus'
 import { propTypes } from '@/utils/propTypes'
 import { useDesign } from '@/hooks/web/useDesign'
@@ -23,14 +23,27 @@ const props = defineProps({
 
 const isLocal = computed(() => props.icon.startsWith('svg-icon:'))
 
-const localIcons = import.meta.glob<Record<string, { default: any }>>('~icons/local/*')
+// 本地 svg 图标：glob 真实文件，交给 vite-svg-loader 的 ?component 编译成组件
+const localIcons = import.meta.glob<Component>('/src/assets/icons/*.svg', {
+  query: '?component',
+  import: 'default'
+})
 
-const localComponent = shallowRef()
+// 文件名 -> loader，例如 '403' -> () => import('/src/assets/icons/403.svg?component')
+const localIconLoaders: Record<string, () => Promise<Component>> = Object.fromEntries(
+  Object.entries(localIcons).map(([path, loader]) => [
+    path.slice(path.lastIndexOf('/') + 1).replace(/\.svg$/, ''),
+    loader
+  ])
+)
+
+const localComponent = shallowRef<Component>()
 
 const resolveLocalIcon = async (icon: string) => {
   const name = icon.replace('svg-icon:', '')
-  const mod = await localIcons[`~icons/local/${name}`]?.()
-  if (mod?.default) localComponent.value = markRaw(mod.default)
+  const loader = localIconLoaders[name]
+  if (!loader) return
+  localComponent.value = markRaw(await loader())
 }
 
 const offlineComponent = computed(() => iconsMap[props.icon])
