@@ -37,6 +37,20 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
       }
     },
 
+    // 配置 CSS 预处理器
+    css: {
+      preprocessorOptions: {
+        // 全局注入 SCSS 变量，如 $adminNamespace、$elNamespace
+        // variables.module.scss 自身跳过注入，避免 @use 自身造成循环引用
+        scss: {
+          additionalData: (content: string, filename: string) =>
+            filename.replace(/\\/g, '/').endsWith('styles/variables.module.scss')
+              ? content
+              : `@use "@/styles/variables.module.scss" as *;\n${content}`
+        }
+      }
+    },
+
     optimizeDeps: {
       include: [
         'vue',

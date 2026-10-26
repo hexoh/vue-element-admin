@@ -65,11 +65,11 @@ const getPasswordStrength = computed(() => {
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-input-password';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-input-password';
 
-.@{prefix-cls} {
-  :deep(.@{elNamespace}-input__clear) {
+.#{$prefix-cls} {
+  :deep(.#{$elNamespace}-input__clear) {
     margin-left: 5px;
   }
 

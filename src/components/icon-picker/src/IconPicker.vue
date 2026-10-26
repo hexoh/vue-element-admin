@@ -183,11 +183,11 @@ const inputClear = () => {
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-icon-picker';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-icon-picker';
 
-.@{prefix-cls} {
-  :deep(.@{elNamespace}-input__wrapper) {
+.#{$prefix-cls} {
+  :deep(.#{$elNamespace}-input__wrapper) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }

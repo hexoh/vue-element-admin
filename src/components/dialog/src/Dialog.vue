@@ -113,14 +113,14 @@ const dialogStyle = computed(() => {
   </ElDialog>
 </template>
 
-<style lang="less">
-.@{elNamespace}-overlay-dialog {
+<style lang="scss">
+.#{$elNamespace}-overlay-dialog {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.@{elNamespace}-dialog {
+.#{$elNamespace}-dialog {
   margin: 0 !important;
 
   &__header {

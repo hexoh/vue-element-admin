@@ -244,10 +244,10 @@ const disabledClick = () => {
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-qrcode';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-qrcode';
 
-.@{prefix-cls} {
+.#{$prefix-cls} {
   &--disabled {
     background: rgb(255 255 255 / 95%);
 

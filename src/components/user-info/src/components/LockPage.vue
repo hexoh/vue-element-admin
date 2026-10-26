@@ -160,27 +160,27 @@ function handleShowForm(show = false) {
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-lock-page';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-lock-page';
 
 // Small screen / tablet
-@screen-sm: 576px;
+$screen-sm: 576px;
 
 // Medium screen / desktop
-@screen-md: 768px;
+$screen-md: 768px;
 
 // Large screen / wide desktop
-@screen-lg: 992px;
+$screen-lg: 992px;
 
 // Extra large screen / full hd
-@screen-xl: 1200px;
+$screen-xl: 1200px;
 
 // Extra extra large screen / large desktop
-@screen-2xl: 1600px;
+$screen-2xl: 1600px;
 
-@error-color: #ed6f6f;
+$error-color: #ed6f6f;
 
-.@{prefix-cls} {
+.#{$prefix-cls} {
   z-index: 3000;
 
   &__unlock {
@@ -197,37 +197,37 @@ function handleShowForm(show = false) {
     justify-content: center;
     align-items: center;
 
-    @media screen and (max-width: @screen-md) {
+    @media screen and (max-width: $screen-md) {
       span:not(.meridiem) {
         font-size: 160px;
       }
     }
 
-    @media screen and (min-width: @screen-md) {
+    @media screen and (min-width: $screen-md) {
       span:not(.meridiem) {
         font-size: 160px;
       }
     }
 
-    @media screen and (max-width: @screen-sm) {
+    @media screen and (max-width: $screen-sm) {
       span:not(.meridiem) {
         font-size: 90px;
       }
     }
 
-    @media screen and (min-width: @screen-lg) {
+    @media screen and (min-width: $screen-lg) {
       span:not(.meridiem) {
         font-size: 220px;
       }
     }
 
-    @media screen and (min-width: @screen-xl) {
+    @media screen and (min-width: $screen-xl) {
       span:not(.meridiem) {
         font-size: 260px;
       }
     }
 
-    @media screen and (min-width: @screen-2xl) {
+    @media screen and (min-width: $screen-2xl) {
       span:not(.meridiem) {
         font-size: 320px;
       }
@@ -269,7 +269,7 @@ function handleShowForm(show = false) {
     &__err-msg {
       display: inline-block;
       margin-top: 10px;
-      color: @error-color;
+      color: $error-color;
     }
 
     &__footer {
