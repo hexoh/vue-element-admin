@@ -242,10 +242,10 @@ const clear = () => {
   </ElDrawer>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-setting';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-setting';
 
-.@{prefix-cls} {
+.#{$prefix-cls} {
   border-radius: 6px 0 0 6px;
 }
 </style>

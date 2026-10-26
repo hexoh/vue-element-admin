@@ -170,14 +170,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-descriptions';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-descriptions';
 
-:deep(.@{elNamespace}-descriptions__header) {
+:deep(.#{$elNamespace}-descriptions__header) {
   display: none !important;
 }
 
-.@{prefix-cls}-header {
+.#{$prefix-cls}-header {
   &__title {
     &::after {
       position: absolute;
@@ -191,12 +191,12 @@ export default defineComponent({
   }
 }
 
-:deep(.@{prefix-cls}-label) {
+:deep(.#{$prefix-cls}-label) {
   width: 150px !important;
 }
 
-// .@{prefix-cls}-content {
-//   :deep(.@{elNamespace}-descriptions__cell) {
+// .#{$prefix-cls}-content {
+//   :deep(.#{$elNamespace}-descriptions__cell) {
 //     width: 0;
 //   }
 // }

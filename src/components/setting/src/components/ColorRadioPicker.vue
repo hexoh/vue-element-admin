@@ -54,10 +54,10 @@ watch(
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-color-radio-picker';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-color-radio-picker';
 
-.@{prefix-cls} {
+.#{$prefix-cls} {
   .is-active {
     border-color: var(--el-color-primary);
   }

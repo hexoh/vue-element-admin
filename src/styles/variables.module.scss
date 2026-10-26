@@ -1,0 +1,17 @@
+/* 全局 SCSS 变量 */
+
+/* 注意：本文件通过 vite.config.ts 的 additionalData 全局注入，可直接使用这些变量 */
+$adminNamespace: 'v';
+$elNamespace: 'el';
+
+/* 命名空间 */
+:root {
+  --namespace: #{$adminNamespace};
+  --el-namespace: #{$elNamespace};
+}
+
+/* 导出变量 */
+:export {
+  namespace: #{$adminNamespace};
+  elNamespace: #{$elNamespace};
+}

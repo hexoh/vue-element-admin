@@ -114,7 +114,7 @@ const containerStyle: CSSProperties = {
     <slot></slot>
   </div>
 </template>
-<style scoped lang="less">
+<style scoped lang="scss">
 .treeMenu {
   position: absolute;
   padding: 5px;

@@ -220,6 +220,10 @@ export default {
   ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
   overrides: [
     {
+      files: ['*.scss', '**/*.scss'],
+      customSyntax: 'postcss-scss'
+    },
+    {
       files: ['*.vue', '**/*.vue', '*.html', '**/*.html'],
       customSyntax: 'postcss-html',
       extends: [

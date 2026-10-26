@@ -125,27 +125,27 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-menu';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-menu';
 
-.@{prefix-cls} {
+.#{$prefix-cls} {
   position: relative;
   transition: width var(--transition-time-02);
 
-  :deep(.@{elNamespace}-menu) {
+  :deep(.#{$elNamespace}-menu) {
     width: 100% !important;
     border-right: none;
 
     // 设置选中时子标题的颜色
     .is-active {
-      & > .@{elNamespace}-sub-menu__title {
+      & > .#{$elNamespace}-sub-menu__title {
         color: var(--left-menu-text-active-color) !important;
       }
     }
 
     // 设置子菜单悬停的高亮和背景色
-    .@{elNamespace}-sub-menu__title,
-    .@{elNamespace}-menu-item {
+    .#{$elNamespace}-sub-menu__title,
+    .#{$elNamespace}-menu-item {
       &:hover {
         color: var(--left-menu-text-active-color) !important;
         background-color: var(--left-menu-bg-color) !important;
@@ -153,7 +153,7 @@ export default defineComponent({
     }
 
     // 设置选中时的高亮背景和高亮颜色
-    .@{elNamespace}-menu-item.is-active {
+    .#{$elNamespace}-menu-item.is-active {
       color: var(--left-menu-text-active-color) !important;
       background-color: var(--left-menu-bg-active-color) !important;
 
@@ -162,25 +162,25 @@ export default defineComponent({
       }
     }
 
-    .@{elNamespace}-menu-item.is-active {
+    .#{$elNamespace}-menu-item.is-active {
       position: relative;
     }
 
     // 设置子菜单的背景颜色
-    .@{elNamespace}-menu {
-      .@{elNamespace}-sub-menu__title,
-      .@{elNamespace}-menu-item:not(.is-active) {
+    .#{$elNamespace}-menu {
+      .#{$elNamespace}-sub-menu__title,
+      .#{$elNamespace}-menu-item:not(.is-active) {
         background-color: var(--left-menu-bg-light-color) !important;
       }
     }
   }
 
   // 折叠时的最小宽度
-  :deep(.@{elNamespace}-menu--collapse) {
+  :deep(.#{$elNamespace}-menu--collapse) {
     width: var(--left-menu-min-width);
 
     & > .is-active,
-    & > .is-active > .@{elNamespace}-sub-menu__title {
+    & > .is-active > .#{$elNamespace}-sub-menu__title {
       position: relative;
       background-color: var(--left-menu-collapse-bg-active-color) !important;
     }
@@ -188,26 +188,26 @@ export default defineComponent({
 
   // 折叠动画的时候，就需要把文字给隐藏掉
   :deep(.horizontal-collapse-transition) {
-    .@{prefix-cls}__title {
+    .#{$prefix-cls}__title {
       display: none;
     }
   }
 
   // 水平菜单
   &__horizontal {
-    height: calc(~'var(--top-tool-height)') !important;
+    height: calc(var(--top-tool-height)) !important;
 
-    :deep(.@{elNamespace}-menu--horizontal) {
-      height: calc(~'var(--top-tool-height)');
+    :deep(.#{$elNamespace}-menu--horizontal) {
+      height: calc(var(--top-tool-height));
       border-bottom: none;
       // 重新设置底部高亮颜色
-      & > .@{elNamespace}-sub-menu.is-active {
-        .@{elNamespace}-sub-menu__title {
+      & > .#{$elNamespace}-sub-menu.is-active {
+        .#{$elNamespace}-sub-menu__title {
           border-bottom-color: var(--el-color-primary) !important;
         }
       }
 
-      .@{elNamespace}-menu-item.is-active {
+      .#{$elNamespace}-menu-item.is-active {
         position: relative;
 
         &::after {
@@ -215,22 +215,24 @@ export default defineComponent({
         }
       }
 
-      .@{prefix-cls}__title {
+      .#{$prefix-cls}__title {
         /* stylelint-disable-next-line */
-        max-height: calc(~'var(--top-tool-height) - 2px') !important;
+        max-height: calc(var(--top-tool-height) - 2px) !important;
         /* stylelint-disable-next-line */
-        line-height: calc(~'var(--top-tool-height) - 2px');
+        line-height: calc(var(--top-tool-height) - 2px);
       }
     }
   }
 }
 </style>
 
-<style lang="less">
-@prefix-cls: ~'@{adminNamespace}-menu-popper';
+<style lang="scss">
+$prefix-cls: '#{$adminNamespace}-menu-popper';
 
-.@{prefix-cls}--vertical,
-.@{prefix-cls}--horizontal {
+$submenu-prefix-cls: '#{$adminNamespace}-submenu-popper';
+
+.#{$prefix-cls}--vertical,
+.#{$prefix-cls}--horizontal {
   // 设置选中时子标题的颜色
   .is-active {
     & > .el-sub-menu__title {
@@ -258,10 +260,8 @@ export default defineComponent({
   }
 }
 
-@submenu-prefix-cls: ~'@{adminNamespace}-submenu-popper';
-
 // 设置子菜单溢出时滚动样式
-.@{submenu-prefix-cls}--vertical {
+.#{$submenu-prefix-cls}--vertical {
   max-height: 100%;
   overflow-y: auto;
 

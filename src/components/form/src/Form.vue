@@ -1,12 +1,12 @@
 <script lang="tsx">
-import { PropType, defineComponent, ref, computed, unref, watch, onMounted } from 'vue'
+import { type PropType, defineComponent, ref, computed, unref, watch, onMounted } from 'vue'
 import {
   ElForm,
   ElFormItem,
   ElRow,
   ElCol,
-  FormRules,
-  ComponentSize
+  type FormRules,
+  type ComponentSize
   // FormItemProp
 } from 'element-plus'
 import { componentMap } from './helper/componentMap'
@@ -25,14 +25,15 @@ import { useRenderCheckbox } from './components/useRenderCheckbox'
 import { useDesign } from '@/hooks/web/useDesign'
 import { findIndex } from '@/utils'
 import { get, set } from 'lodash-es'
-import { FormProps } from './types'
+import type { FormProps } from './types'
 import {
-  FormSchema,
-  FormSetProps,
+  type FormSchema,
+  type FormSetProps,
   ComponentNameEnum,
-  SelectComponentProps,
-  RadioGroupComponentProps,
-  CheckboxGroupComponentProps
+  type ComponentName,
+  type SelectComponentProps,
+  type RadioGroupComponentProps,
+  type CheckboxGroupComponentProps
 } from './types'
 
 const { renderSelectOptions } = useRenderSelect()
@@ -43,8 +44,13 @@ const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('form')
 
+// 阻止 el-form 原生提交，避免页面刷新
+const handleSubmit = (e: Event) => {
+  e.preventDefault()
+}
+
 export default defineComponent({
-  name: 'Form',
+  name: 'AppForm',
   props: {
     // 生成Form的布局结构数组
     schema: {
@@ -102,10 +108,10 @@ export default defineComponent({
     })
 
     // 存储表单实例
-    const formComponents = ref({})
+    const formComponents = ref<Recordable>({})
 
     // 存储form-item实例
-    const formItemComponents = ref({})
+    const formItemComponents = ref<Recordable>({})
 
     // 表单数据
     const formModel = ref<Recordable>(props.model)
@@ -152,7 +158,7 @@ export default defineComponent({
       }
     }
 
-    const getOptions = async (fn: Function, item: FormSchema) => {
+    const getOptions = async (fn: () => any, item: FormSchema) => {
       const options = await fn()
       if (!options || options.length == 0) return
       setSchema([
@@ -263,7 +269,9 @@ export default defineComponent({
           if (item?.formItemProps?.slots?.default) {
             return item?.formItemProps?.slots?.default(formModel.value)
           } else {
-            const Com = componentMap[item.component as string] as ReturnType<typeof defineComponent>
+            const Com = componentMap[item.component as ComponentName] as ReturnType<
+              typeof defineComponent
+            >
 
             const { autoSetPlaceholder } = unref(getProps)
 
@@ -284,8 +292,8 @@ export default defineComponent({
 
             // 虚拟列表
             if (item.component === ComponentNameEnum.SELECT_V2 && componentSlots.default) {
-              slotsMap.default = ({ item }) => {
-                return componentSlots.default(item)
+              slotsMap.default = ({ item: optionItem }: { item: any }) => {
+                return componentSlots.default(optionItem)
               }
             }
 
@@ -390,7 +398,7 @@ export default defineComponent({
     const getFormBindValue = () => {
       // 避免在标签上出现多余的属性
       const delKeys = ['schema', 'isCol', 'autoSetPlaceholder', 'isCustom', 'model']
-      const props = { ...unref(getProps) }
+      const props: Recordable = { ...unref(getProps) }
       for (const key in props) {
         if (delKeys.indexOf(key) !== -1) {
           delete props[key]
@@ -405,10 +413,7 @@ export default defineComponent({
         {...getFormBindValue()}
         model={unref(getProps).isCustom ? unref(getProps).model : formModel}
         class={prefixCls}
-        // @ts-ignore
-        onSubmit={(e: Event) => {
-          e.preventDefault()
-        }}
+        {...{ onSubmit: handleSubmit }}
       >
         {{
           // 如果需要自定义，就什么都不渲染，而是提供默认插槽
@@ -423,19 +428,19 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less" scoped>
-.@{elNamespace}-form.@{adminNamespace}-form .@{elNamespace}-row {
+<style lang="scss" scoped>
+.#{$elNamespace}-form.#{$adminNamespace}-form .#{$elNamespace}-row {
   margin-right: 0 !important;
   margin-left: 0 !important;
 }
 
-.@{elNamespace}-form--inline {
+.#{$elNamespace}-form--inline {
   :deep(.el-form-item__content) {
     & > :first-child {
       min-width: 229.5px;
     }
   }
-  .@{elNamespace}-input-number {
+  .#{$elNamespace}-input-number {
     // 229.5px是兼容el-input-number的最小宽度,
     min-width: 229.5px;
   }

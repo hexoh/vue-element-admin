@@ -253,6 +253,11 @@ const move = (to: number) => {
   start()
 }
 
+const getTagIcon = (item: RouteLocationNormalizedLoaded): string | undefined => {
+  const icon = item?.matched?.[1]?.meta?.icon || item?.meta?.icon
+  return typeof icon === 'string' ? icon : undefined
+}
+
 const canShowIcon = (item: RouteLocationNormalizedLoaded) => {
   if (
     (item?.matched?.[1]?.meta?.icon && unref(tagsViewIcon)) ||
@@ -376,7 +381,7 @@ watch(
                 >
                   <Icon
                     v-if="canShowIcon(item)"
-                    :icon="item?.matched?.[1]?.meta?.icon || item?.meta?.icon"
+                    :icon="getTagIcon(item)"
                     :size="12"
                     class="mr-5px"
                   />
@@ -485,11 +490,11 @@ watch(
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{adminNamespace}-tags-view';
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-tags-view';
 
-.@{prefix-cls} {
-  :deep(.@{elNamespace}-scrollbar__view) {
+.#{$prefix-cls} {
+  :deep(.#{$elNamespace}-scrollbar__view) {
     height: 100%;
   }
 
@@ -501,7 +506,7 @@ watch(
       top: 1px;
       left: 0;
       width: 100%;
-      height: calc(~'100% - 1px');
+      height: calc(100% - 1px);
       border-left: 1px solid var(--el-border-color);
       content: '';
     }
@@ -512,7 +517,7 @@ watch(
         top: 1px;
         left: 0;
         width: 100%;
-        height: calc(~'100% - 1px');
+        height: calc(100% - 1px);
         border-right: 1px solid var(--el-border-color);
         border-left: none;
         content: '';
@@ -523,7 +528,7 @@ watch(
   &__item {
     position: relative;
     top: 3px;
-    height: calc(~'100% - 6px');
+    height: calc(100% - 6px);
     padding-right: 25px;
     margin-left: 4px;
     font-size: 12px;
@@ -538,8 +543,8 @@ watch(
       display: none;
       transform: translate(0, -50%);
     }
-    &:not(.@{prefix-cls}__item--affix):hover {
-      .@{prefix-cls}__item--close {
+    &:not(.#{$prefix-cls}__item--affix):hover {
+      .#{$prefix-cls}__item--close {
         display: block;
       }
     }
@@ -555,7 +560,7 @@ watch(
     color: var(--el-color-white);
     background-color: var(--el-color-primary);
     border: 1px solid var(--el-color-primary);
-    .@{prefix-cls}__item--close {
+    .#{$prefix-cls}__item--close {
       :deep(svg) {
         color: var(--el-color-white) !important;
       }
@@ -564,7 +569,7 @@ watch(
 }
 
 .dark {
-  .@{prefix-cls} {
+  .#{$prefix-cls} {
     &__tool {
       &--first {
         &::after {
@@ -587,7 +592,7 @@ watch(
       color: var(--el-color-white);
       background-color: var(--el-color-primary);
       border: 1px solid var(--el-color-primary);
-      .@{prefix-cls}__item--close {
+      .#{$prefix-cls}__item--close {
         :deep(svg) {
           color: var(--el-color-white) !important;
         }

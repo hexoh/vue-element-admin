@@ -83,7 +83,7 @@ const toPage = (path: string) => {
   </teleport>
 </template>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .fade-bottom-enter-active,
 .fade-bottom-leave-active {
   transition:
