@@ -47,7 +47,7 @@ const toPage = (path: string) => {
   <ElDropdown class="custom-hover" :class="prefixCls" trigger="click">
     <div class="flex items-center">
       <img
-        src="@/assets/icons/avatar.jpg"
+        src="@/assets/icons/avatar.svg"
         alt=""
         class="w-[calc(var(--logo-height)-25px)] rounded-[50%]"
       />
