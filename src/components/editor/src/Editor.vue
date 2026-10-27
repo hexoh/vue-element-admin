@@ -9,6 +9,8 @@ import {
   watch,
   shallowRef
 } from 'vue'
+import '@wangeditor/editor/dist/css/style.css'
+
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { type IDomEditor, type IEditorConfig, i18nChangeLanguage } from '@wangeditor/editor'
 import { propTypes } from '@/utils/propTypes'
