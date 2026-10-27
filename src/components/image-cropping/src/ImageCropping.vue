@@ -42,15 +42,22 @@ const props = defineProps({
   }
 })
 
-const getBase64 = useDebounceFn(async () => {
+// cropperjs 2.x 移除了 getCroppedCanvas，改用选区（CropperSelection）的 $toCanvas
+const getBase64 = async () => {
   const selection = unref(cropperRef)?.getCropperSelection()
-  if (!selection) return
+  if (!selection) return ''
   try {
     const canvas = await selection.$toCanvas()
-    imgBase64.value = canvas?.toDataURL() ?? ''
+    return canvas?.toDataURL() ?? ''
   } catch (error) {
     console.error('获取截屏失败:', error)
+    return ''
   }
+}
+
+// 仅用于更新组件内部预览图，避免频繁截屏
+const updatePreview = useDebounceFn(async () => {
+  imgBase64.value = await getBase64()
 }, 80)
 
 const resetCropBox = () => {
@@ -61,7 +68,7 @@ const resetCropBox = () => {
     selection.aspectRatio = 1
     selection.$center()
   }
-  getBase64()
+  updatePreview()
 }
 
 const getBoxStyle = computed(() => {
@@ -101,7 +108,7 @@ const intiCropper = () => {
   if (selection) {
     selection.aspectRatio = 1
     // 选区变化时重新获取 base64
-    selection.addEventListener('change', getBase64)
+    selection.addEventListener('change', updatePreview)
   }
 
   // 初始加载一次预览
@@ -140,7 +147,7 @@ const reset = () => {
 
 const rotate = (deg: number) => {
   unref(cropperRef)?.getCropperImage()?.$rotate(deg)
-  getBase64()
+  updatePreview()
 }
 
 const scaleX = ref(1)
@@ -157,12 +164,12 @@ const scale = (type: 'scaleX' | 'scaleY') => {
 
   // 2.x 使用 $scale(x, y)
   image.$scale(scaleX.value, scaleY.value)
-  getBase64()
+  updatePreview()
 }
 
 const zoom = (num: number) => {
   unref(cropperRef)?.getCropperImage()?.$zoom(num)
-  getBase64()
+  updatePreview()
 }
 
 onMounted(() => {
@@ -183,7 +190,8 @@ onBeforeUnmount(() => {
 })
 
 defineExpose({
-  cropperExpose: cropperRef
+  cropperExpose: cropperRef,
+  getBase64
 })
 </script>
 

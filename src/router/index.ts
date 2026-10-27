@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { Layout /*,  getParentLayout */ } from './generate'
 import { useI18n } from '@/hooks/web/useI18n'
 import { NO_RESET_WHITE_LIST } from '@/constants'
 
@@ -8,6 +9,32 @@ const { t } = useI18n()
 
 // 常量路由
 export const constantRouterMap: AppRouteRecordRaw[] = [
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/home',
+    name: 'Root',
+    meta: {
+      hidden: true
+    }
+  },
+  {
+    path: '/redirect',
+    component: Layout,
+    name: 'RedirectWrap',
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        name: 'Redirect',
+        component: () => import('@/views/redirect/Redirect.vue'),
+        meta: {}
+      }
+    ],
+    meta: {
+      hidden: true,
+      noTagsView: true
+    }
+  },
   {
     path: '/login',
     name: 'Login',
@@ -20,13 +47,46 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
     }
   },
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: () => import('../views/home/HomeView.vue'),
     meta: {
       title: t('router.dashboard'),
       icon: 'home-filled',
       affix: true
+    }
+  },
+  {
+    path: '/personal',
+    component: Layout,
+    redirect: '/personal/center',
+    name: 'Personal',
+    meta: {
+      title: t('router.personal'),
+      hidden: true,
+      canTo: true
+    },
+    children: [
+      {
+        path: 'center',
+        component: () => import('@/views/personal/Center.vue'),
+        name: 'PersonalCenter',
+        meta: {
+          title: t('router.personalCenter'),
+          hidden: true,
+          canTo: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/Error/404.vue'),
+    name: 'NoFind',
+    meta: {
+      hidden: true,
+      title: '404',
+      noTagsView: true
     }
   }
 ]
