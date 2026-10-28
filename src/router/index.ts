@@ -12,7 +12,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/home',
+    redirect: '/home/index',
     name: 'Root',
     meta: {
       hidden: true
@@ -49,12 +49,24 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import('../views/home/HomeView.vue'),
+    component: Layout,
     meta: {
       title: t('router.dashboard'),
-      icon: 'home-filled',
-      affix: true
-    }
+      icon: 'vi-ant-design:dashboard-filled',
+      alwaysShow: true
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('../views/home/HomeView.vue'),
+        name: 'HomeIndex',
+        meta: {
+          title: t('router.workplace'),
+          icon: 'home-filled',
+          affix: true
+        }
+      }
+    ]
   },
   {
     path: '/personal',
@@ -81,7 +93,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   },
   {
     path: '/404',
-    component: () => import('@/views/Error/404.vue'),
+    component: () => import('@/views/error/404.vue'),
     name: 'NoFind',
     meta: {
       hidden: true,

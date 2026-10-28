@@ -11,6 +11,7 @@
     "dev": "pnpm vite",
     "ts:check": "pnpm vue-tsc --noEmit --skipLibCheck",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:test": "pnpm run build -- --mode test",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "pnpm vite build",

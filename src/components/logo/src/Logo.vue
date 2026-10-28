@@ -58,14 +58,15 @@ watch(
       ]"
       to="/"
     >
-      <!-- <img
-        src="@/assets/imgs/logo.png"
-        class="w-[calc(var(--logo-height)-10px)] h-[calc(var(--logo-height)-10px)]"
-      /> -->
+      <img
+        src="/logo.svg"
+        class="w-[calc(var(--logo-height)-10px)] h-[calc(var(--logo-height)-10px)] shrink-0"
+      />
       <div
         v-if="show"
+        :title="title"
         :class="[
-          'ml-10px text-20px font-700',
+          'ml-10px min-w-0 mr-5px max-w-[var(--logo-title-max-width)] truncate text-20px font-700',
           {
             'text-[var(--logo-title-text-color)]': layout === 'classic',
             'text-[var(--top-header-text-color)]':
