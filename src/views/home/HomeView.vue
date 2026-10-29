@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TheWelcome from './components/TheWelcome.vue'
+import { ContentWrap } from '@/components/content-wrap'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <ContentWrap title="home">This is the home view.</ContentWrap>
 </template>
+
+<style lang="scss" scoped></style>
