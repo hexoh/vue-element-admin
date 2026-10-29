@@ -86,13 +86,13 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-.v-breadcrumb,
-.el-breadcrumb {
-  :deep(&__item) {
-    display: flex;
+<style lang="scss" scoped>
+$prefix-cls: '#{$elNamespace}-breadcrumb';
 
-    .el-breadcrumb__inner {
+.#{$prefix-cls} {
+  :deep(.#{$prefix-cls}__item) {
+    display: flex;
+    .#{$prefix-cls}__inner {
       display: flex;
       align-items: center;
       color: var(--top-header-text-color);
@@ -103,8 +103,8 @@ export default defineComponent({
     }
   }
 
-  :deep(&__item):not(:last-child) {
-    .el-breadcrumb__inner {
+  :deep(.#{$prefix-cls}__item):not(:last-child) {
+    .#{$prefix-cls}__inner {
       color: var(--top-header-text-color);
 
       &:hover {
@@ -113,8 +113,8 @@ export default defineComponent({
     }
   }
 
-  :deep(&__item):last-child {
-    .el-breadcrumb__inner {
+  :deep(.#{$prefix-cls}__item):last-child {
+    .#{$prefix-cls}__inner {
       color: var(--el-text-color-placeholder);
 
       &:hover {

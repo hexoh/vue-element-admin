@@ -94,15 +94,8 @@ export const isServer = typeof window === 'undefined'
 
 export const isClient = !isServer
 
-export const isUrl = (path: string): boolean => {
-  try {
-    const url = new URL(path)
-    return !!url.host
-  } catch (_error) {
-    console.error('Invalid URL:', _error)
-    return false
-  }
-}
+export const isUrl = (path: string): boolean =>
+  typeof path === 'string' && /^(https?:|mailto:|tel:)/.test(path)
 
 export const isDark = (): boolean => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches

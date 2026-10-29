@@ -141,4 +141,4 @@ defineExpose({
   </div>
 </template>
 
-<style src="@wangeditor/editor/dist/css/style.css"></style>
+<style src="@wangeditor-next/editor/dist/css/style.css"></style>

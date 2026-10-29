@@ -86,8 +86,10 @@ const getIconName = computed(() => {
   </ElIcon>
 </template>
 
-<style scoped>
-.v-icon,
+<style lang="scss" scoped>
+$prefix-cls: '#{adminNamespace}-icon';
+
+.#{prefix-cls},
 .iconify {
   :deep(svg) {
     &:hover {
