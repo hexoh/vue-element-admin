@@ -127,9 +127,3 @@ const style = computed(() => {
     <slot name="loading"></slot>
   </ElButton>
 </template>
-
-<style>
-.el-button.is-plain:hover .el-icon {
-  color: #fff;
-}
-</style>

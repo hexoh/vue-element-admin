@@ -49,6 +49,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/home',
     name: 'Home',
+    redirect: '/home/analysis',
     component: Layout,
     meta: {
       title: t('router.dashboard'),
@@ -57,12 +58,21 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
     },
     children: [
       {
+        path: 'analysis',
+        component: () => import('@/views/home/HomeView.vue'),
+        name: 'Analysis',
+        meta: {
+          title: t('router.analysis'),
+          noCache: true,
+          affix: true
+        }
+      },
+      {
         path: 'index',
-        component: () => import('../views/home/HomeView.vue'),
+        component: () => import('@/views/home/HomeView.vue'),
         name: 'HomeIndex',
         meta: {
           title: t('router.workplace'),
-          icon: 'home-filled',
           affix: true
         }
       }

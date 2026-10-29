@@ -27,6 +27,7 @@ const getElementPlusStyleConfig = (env: Record<string, string>) => {
         {
           libraryName: 'element-plus',
           esModule: true,
+          importTest: /^El[A-Z]/,
           resolveStyle: (name) => {
             if (name === 'click-outside') {
               return ''

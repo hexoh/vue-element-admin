@@ -58,7 +58,7 @@ const toPage = (path: string) => {
     <template #dropdown>
       <ElDropdownMenu>
         <ElDropdownItem>
-          <div @click="toPage('/personal/personal-center')">
+          <div @click="toPage('/personal/center')">
             {{ t('router.personalCenter') }}
           </div>
         </ElDropdownItem>

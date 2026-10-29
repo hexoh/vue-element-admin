@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ContentWrap } from '@/components/content-wrap'
-import defaultAvatar from '@/assets/imgs/avatar.jpg'
+import defaultAvatar from '@/assets/icons/avatar.jpg'
 import UploadAvatar from './components/UploadAvatar.vue'
 import { Dialog } from '@/components/dialog'
 import EditInfo from './components/EditInfo.vue'
@@ -116,7 +116,7 @@ const saveAvatar = async () => {
   </Dialog>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .avatar {
   position: relative;
 
