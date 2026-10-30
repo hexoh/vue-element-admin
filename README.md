@@ -1011,3 +1011,115 @@ export const setupElementPlus = (app: App) => {
   })
 }
 ```
+
+## 项目组件和插件
+
+本章简要介绍 `src/components` 下的公共组件与 `src/hooks/web` 下的组合式函数，方便开发时快速查找可复用的能力。
+
+组件均为按需引入，目录名为 `kebab-case`，引入时保持一致的路径写法：
+
+```ts
+import { Table } from '@/components/table'
+import { Form } from '@/components/form'
+```
+
+其中 `Icon`、`Permission`、`BaseButton` 已在 `src/components/index.ts` 通过 `setupGlobCom` 全局注册，无需引入即可使用。
+
+### 公共组件
+
+#### 基础组件
+
+| 组件 | 说明 |
+| --- | --- |
+| `Icon` | 统一图标组件，支持 `Iconify` 在线图标、本地 `svg` 图标（`svg-icon:edit`）以及 `element-plus` 图标，可设置 `size`、`color`、`hoverColor` |
+| `BaseButton` | 基于 `ElButton` 封装的按钮，继承全部原生属性，额外支持 `icon` / `loadingIcon`（图标名）、`color`、`darker`（自动加深主题色）等配置 |
+| `Permission` | 权限包裹组件，读取当前路由 `meta.permission` 判断是否渲染插槽内容，同时导出 `hasPermi` 方法用于逻辑判断 |
+| `Highlight` | 文本高亮组件，把 `keys` 匹配到的文本渲染为可点击的高亮片段，并派发 `click` 事件 |
+| `IAgree` | 协议勾选组件，复选框 + 可点击的协议链接（内部复用 `Highlight`），支持自定义文案与链接列表 |
+| `Avatars` | 头像组，支持 `size`、`max`（超出显示 `+N`）、`showTooltip` 与自定义数据源 |
+| `Infotip` | 信息提示块，按 `schema` 渲染多条说明文字，支持标题，常用于页面顶部的操作说明 |
+| `CountTo` | 数字滚动动画组件，支持起始值、结束值、时长、小数位与分隔符 |
+| `Qrcode` | 二维码组件，支持 `canvas`/`img` 两种渲染方式、中心 `logo` 嵌套与过期置灰提示 |
+| `Backtop` | 回到顶部按钮，默认绑定布局内容区的滚动容器 |
+| `Collapse` | 侧边菜单折叠按钮，直接读写 `appStore` 的 `collapse` 状态，图标随状态切换 |
+
+#### 布局与容器
+
+| 组件 | 说明 |
+| --- | --- |
+| `ConfigGlobal` | 全局配置组件，包裹 `ElConfigProvider`，统一组件尺寸、多语言与主题变量，并监听窗口宽度自动切换移动端/折叠状态 |
+| `ContentWrap` | 内容卡片容器，基于 `ElCard`，支持 `title` 与 `message`（标题后的问号提示） |
+| `ContentDetailWrap` | 详情页容器，提供 `header` 插槽与默认插槽，用于「头部操作区 + 内容区」的详情页面 |
+| `Logo` | 侧边栏 Logo 与系统标题，折叠时自动只显示图标 |
+| `Footer` | 页脚组件，显示系统标题与版权信息，可通过 `appStore` 配置开关 |
+| `Error` | 错误页组件，内置 `404` / `500` / `403` 三种插画与文案，点击按钮派发 `errorClick` |
+| `Waterfall` | 瀑布流布局组件，支持 `flex` / `javascript` 两种布局、自定义列数与间距，滚动到底部派发 `loadMore` 实现无限加载 |
+
+#### 表单与编辑器
+
+| 组件 | 说明 |
+| --- | --- |
+| `Form` | 配置化表单，通过 `schema` 描述表单项（输入框、选择器、日期、树选择等），支持动态 `setValues`、`setProps`、`addSchema`、`delSchema`、`setSchema` |
+| `Search` | 查询表单，基于 `Form` 封装，自带展开/收起与查询、重置按钮，暴露 `getFormData` 获取查询条件 |
+| `InputPassword` | 密码输入框，基于 `ElInput` 封装，带明文/密文切换按钮 |
+| `IconPicker` | 图标选择器，下拉分页浏览 `Iconify` 图标并回填图标名 |
+| `ImageCropping` | 图片裁剪组件，基于 `cropperjs`，支持上传、裁剪框尺寸、缩放旋转与导出 `base64` |
+| `Editor` | 富文本编辑器，基于 `wangeditor`，支持工具栏配置、高度设置与多语言，暴露 `getEditorRef` 获取编辑器实例 |
+| `CodeEditor` | 代码编辑器，基于 `monaco-editor`，支持语言切换、主题跟随、只读与格式化 |
+| `JsonEditor` | JSON 查看器，基于 `vue-json-pretty`，支持层级深度、行号、虚拟滚动与节点点击事件 |
+
+#### 数据展示
+
+| 组件 | 说明 |
+| --- | --- |
+| `Table` | 配置化表格，通过 `columns` 描述列（支持插槽、格式化、图片/视频预览），内置分页、多选、索引列与空数据，暴露 `setProps`、`setColumn`、`addColumn`、`delColumn`、`elTableRef` |
+| `Descriptions` | 配置化描述列表，通过 `schema` 渲染详情字段，支持跨列、自定义插槽与边框模式 |
+| `Tree` | 树形组件，基于 `ElTree` 封装，支持自定义宽高、右键菜单与节点展开/收起/点击事件 |
+| `Echart` | 图表组件，基于 `echarts`，支持自适应尺寸、主题切换与 `wordCloud` 词云 |
+| `VideoPlayer` | 视频播放器，基于 `xgplayer`，并导出 `createVideoViewer` 以函数方式打开视频弹层 |
+| `VideoPlayerViewer` | 视频弹层组件，供 `createVideoViewer` 内部使用，也可单独引入 |
+| `ImageViewer` | 图片预览组件，基于 `ElImageViewer`，并导出 `createImageViewer` 以函数方式打开预览 |
+
+#### 弹窗
+
+| 组件 | 说明 |
+| --- | --- |
+| `Dialog` | 弹窗组件，基于 `ElDialog` 封装，支持全屏切换、内容区最大高度与滚动；同目录下的 `ResizeDialog` 为可拖拽改变尺寸的变体，未在入口文件中导出，可按需单独引入 |
+
+#### 框架布局组件
+
+以下组件主要在 `src/layout` 中使用，二次开发布局时可直接复用。
+
+| 组件             | 说明                                                                         |
+| ---------------- | ---------------------------------------------------------------------------- |
+| `Breadcrumb`     | 面包屑导航，根据当前路由与 `meta.breadcrumb` 自动生成，支持图标与不可点击项  |
+| `Menu`           | 递归渲染的侧边菜单，根据权限路由生成，支持折叠、外链与多级菜单               |
+| `TabMenu`        | 顶部标签式菜单，用于 `top` / `cutMenu` 布局，支持折叠与外部链接              |
+| `TagsView`       | 页签栏，支持固定、刷新、关闭、关闭其他/全部与右键菜单                        |
+| `ContextMenu`    | 通用右键菜单，通过 `schema` 配置菜单项与 `command` 回调                      |
+| `UserInfo`       | 右上角用户信息下拉，包含锁屏、修改密码、退出登录，并集成 `LockPage` 锁屏页   |
+| `Setting`        | 系统设置抽屉，可切换主题色、暗黑模式、布局方式、界面显示项并持久化到本地缓存 |
+| `ThemeSwitch`    | 亮色/暗色主题切换开关                                                        |
+| `LocaleDropdown` | 多语言切换下拉                                                               |
+| `SizeDropdown`   | 组件尺寸（`default` / `large` / `small`）切换下拉                            |
+| `Screenfull`     | 全屏切换按钮，基于 `@vueuse/core` 的 `useFullscreen`                         |
+
+### 组合式函数（Hooks）
+
+`src/hooks/web` 下为公共组合式函数，与业务无关、可跨页面复用。
+
+| Hook | 说明 |
+| --- | --- |
+| `useTable` | 表格逻辑封装，接收 `fetchDataApi` / `fetchDelApi`，内部管理 `loading`、分页、数据列表与查询，提供 `getList`、`setProps`、`setColumn`、`addColumn`、`delColumn`、`delList`、`getElTableExpose` 等方法，配合 `Table` 组件使用 |
+| `useSearch` | 查询表单逻辑封装，通过 `searchRegister` 注册 `Search` 实例，提供 `setProps`、`setValues`、`setSchema`、`addSchema`、`delSchema`、`getFormData` 等方法 |
+| `useCrudSchemas` | 一套 `schema` 同时生成查询、表格、表单、详情四种配置（`searchSchema` / `tableColumns` / `formSchema` / `detailSchema`），并导出 `filterSearchSchema`、`filterTableSchema` 等过滤函数 |
+| `useClipboard` | 复制文本到剪贴板，返回 `copy`、`text`、`copied`、`isSupported`，内部兼容 `navigator.clipboard` 与 `execCommand` |
+| `useWatermark` | 生成/更新/清除页面水印，支持指定挂载容器，窗口尺寸变化自动重绘 |
+| `useNetwork` | 监听浏览器在线/离线状态，返回响应式的 `online` |
+| `useTimeAgo` | 相对时间格式化（如「3 分钟前」），内置中英文文案，跟随当前语言环境 |
+| `useTitle` | 设置并响应式更新浏览器标签页标题，自动拼接系统标题与国际化文案 |
+| `usePageLoading` | 控制全局页面加载状态（`loadStart` / `loadDone`），状态存放于 `appStore` |
+| `useNProgress` | 顶部进度条控制，提供 `start` / `done`，进度条颜色自动跟随主题色 |
+| `useGuide` | 新手引导，基于 `driver.js`，内置菜单、工具栏、页签三步引导，也可传入自定义 `steps` |
+
+> 说明：`useDesign`、`useI18n`、`useIcon`、`useLocale`、`useStorage`、`useNow`、`useValidator`、`useConfigGlobal`、`useTagsView`、`useMonacoEditor`、`useForm` 已被上述组件内部集成（例如 `useDesign` 提供 `prefixCls` 与命名空间变量、`useForm` 支撑 `Form`/`Search` 的配置化能力），使用对应组件时无需再单独调用，故不在此重复介绍。
