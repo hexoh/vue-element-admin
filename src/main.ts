@@ -10,7 +10,7 @@ import '@/plugins/mock'
 import '@/plugins/animate'
 
 // 引入全局样式
-import './styles/main.css'
+import './styles/main.scss'
 
 // 初始化多语言
 import { setupI18n } from '@/plugins/vue-i18n'

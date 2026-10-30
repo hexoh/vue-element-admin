@@ -365,3 +365,649 @@ const count = ref<number>(0)
   ```html
   <div class="hover:bg-gray-400 hover:font-medium font-light font-mono" />
   ```
+
+## 项目配置
+
+### 环境变量配置
+
+环境变量配置包括 `dev`、`test`、`prod`，具体可以查看配置文件
+
+### 主题配置
+
+#### 配置文件路径
+
+`src/store/modules/app.ts`
+
+#### 说明
+
+修改完之后，会添加到全局的状态管理中，方便其他地方使用。
+
+```js
+export const appModules: AppState = {
+  sizeMap: ['default', 'large', 'small'],
+  mobile: false, // 是否是移动端
+  title: import.meta.env.VITE_APP_TITLE as string, // 标题
+  pageLoading: false, // 路由跳转loading
+
+  breadcrumb: true, // 面包屑
+  breadcrumbIcon: true, // 面包屑图标
+  collapse: false, // 折叠菜单
+  hamburger: true, // 折叠图标
+  screenfull: true, // 全屏图标
+  size: true, // 尺寸图标
+  locale: true, // 多语言图标
+  tagsView: true, // 标签页
+  logo: true, // logo
+  fixedHeader: true, // 固定toolheader
+  footer: true, // 显示页脚
+  greyMode: false, // 是否开始灰色模式，用于特殊悼念日
+
+  layout: wsCache.get('layout') || 'classic', // layout布局
+  isDark: wsCache.get('isDark') || false, // 是否是暗黑模式
+  currentSize: wsCache.get('default') || 'default', // 组件尺寸
+  theme: wsCache.get('theme') || {
+    // 主题色
+    elColorPrimary: '#409eff',
+    // 左侧菜单边框颜色
+    leftMenuBorderColor: 'inherit',
+    // 左侧菜单背景颜色
+    leftMenuBgColor: '#001529',
+    // 左侧菜单浅色背景颜色
+    leftMenuBgLightColor: '#0f2438',
+    // 左侧菜单选中背景颜色
+    leftMenuBgActiveColor: 'var(--el-color-primary)',
+    // 左侧菜单收起选中背景颜色
+    leftMenuCollapseBgActiveColor: 'var(--el-color-primary)',
+    // 左侧菜单字体颜色
+    leftMenuTextColor: '#bfcbd9',
+    // 左侧菜单选中字体颜色
+    leftMenuTextActiveColor: '#fff',
+    // logo字体颜色
+    logoTitleTextColor: '#fff',
+    // logo边框颜色
+    logoBorderColor: 'inherit',
+    // 头部背景颜色
+    topHeaderBgColor: '#fff',
+    // 头部字体颜色
+    topHeaderTextColor: 'inherit',
+    // 头部悬停颜色
+    topHeaderHoverColor: '#f6f6f6',
+    // 头部边框颜色
+    topToolBorderColor: '#eee'
+  }
+}
+```
+
+如果想要添加新的全局配置属性，需要在 `src/store/modules/app.ts` 中 `AppState` 添加对应的类型，并在 appModules 对象中，赋予新属性的默认值。
+
+### 多语言配置
+
+用于配置多语言信息
+
+在 `src/store/modules/locale.ts` 内配置
+
+```js
+import { useCache } from '@/hooks/web/useCache'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import en from 'element-plus/lib/locale/lang/en'
+
+const { wsCache } = useCache()
+
+export const elLocaleMap = {
+  'zh-CN': zhCn,
+  en: en
+}
+export interface LocaleState {
+  currentLocale: LocaleDropdownType
+  localeMap: LocaleDropdownType[]
+}
+
+export const localeModules: LocaleState = {
+  currentLocale: {
+    lang: wsCache.get('lang') || 'zh-CN',
+    elLocale: elLocaleMap[wsCache.get('lang') || 'zh-CN']
+  },
+  // 多语言
+  localeMap: [
+    {
+      lang: 'zh-CN',
+      name: '简体中文'
+    },
+    {
+      lang: 'en',
+      name: 'English'
+    }
+  ]
+}
+```
+
+### 样式配置
+
+#### css 前缀设置
+
+用于修改项目内组件及 `element-plus` 组件的 `class` 前缀。
+
+由于 `element-plus` 的组件还没有全部采用动态配置前缀，所以目前还是使用 `el` 前缀。
+
+在 `src/styles/variables.module.scss` 内配置
+
+```scss
+$adminNamespace: 'v';
+$elNamespace: 'el';
+
+/* 命名空间 */
+:root {
+  --namespace: #{$adminNamespace};
+  --el-namespace: #{$elNamespace};
+}
+
+/* 导出变量 */
+:export {
+  namespace: #{$adminNamespace};
+  elNamespace: #{$elNamespace};
+}
+```
+
+#### 前缀使用
+
+```scss
+<style lang="scss" scoped>
+$prefix-cls: '#{$adminNamespace}-app';
+
+.#{$prefix-cls} {
+  :deep(.#{$elNamespace}-input__clear) {
+    margin-left: 5px;
+  }
+</style>
+```
+
+```js
+import { useDesign } from '/@/hooks/web/useDesign'
+
+const { prefixCls } = useDesign('app')
+```
+
+## 路由
+
+项目路由配置存放于 src/router/index.ts 中。
+
+为了方便阅读和查找，目前项目中并没有去对路由进行拆分，而是统一写在了一起，如果需要拆分，可自行更改。
+
+```js
+/**
+* redirect: noredirect        当设置 noredirect 的时候该路由在面包屑导航中不可被点击
+* name:'router-name'          设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
+* meta : {
+    hidden: true              当设置 true 的时候该路由不会再侧边栏出现 如404，login等页面(默认 false)
+
+    alwaysShow: true          当你一个路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式，
+                              只有一个时，会将那个子路由当做根路由显示在侧边栏，
+                              若你想不管路由下面的 children 声明的个数都显示你的根路由，
+                              你可以设置 alwaysShow: true，这样它就会忽略之前定义的规则，
+                              一直显示根路由(默认 false)
+
+    title: 'title'            设置该路由在侧边栏和面包屑中展示的名字
+
+    icon: 'svg-name'          设置该路由的图标
+
+    noCache: true             如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
+
+    breadcrumb: false         如果设置为false，则不会在breadcrumb面包屑中显示(默认 true)
+
+    affix: true               如果设置为true，则会一直固定在tag项中(默认 false)
+
+    noTagsView: true          如果设置为true，则不会出现在tag中(默认 false)
+
+    activeMenu: '/dashboard'  显示高亮的路由路径
+
+    canTo: true               设置为true即使hidden为true，也依然可以进行路由跳转(默认 false)
+
+    permission: ['edit','add', 'delete']    设置该路由的权限
+  }
+**/
+```
+
+### 如何添加新配置
+
+如果本项目中的路由配置项，满足不了你当前的开发工作，可以自行添加新的属性。
+
+> **注意：** <br/> 所有的路由项配置，都必须放在 `meta` 中。
+
+在 `types/router.d.ts` 中添加对应的类型，之后就可以在路由中添加你需要的配置项了。
+
+```js
+declare module 'vue-router' {
+  interface RouteMeta extends Record<string | number | symbol, unknown> {
+    hidden?: boolean
+    alwaysShow?: boolean
+    title?: string
+    icon?: string
+    noCache?: boolean
+    breadcrumb?: boolean
+    affix?: boolean
+    activeMenu?: string
+    noTagsView?: boolean
+    canTo?: boolean
+    permission?: string[]
+
+    // 添加新的配置类型
+    ...
+  }
+}
+```
+
+### 多级路由
+
+> **注意事项**
+>
+> - 整个项目所有路由 name 不能重复
+> - 所有的多级路由最终都会转成二级路由，所以不能内嵌子路由
+> - 除了 layout 对应的 path 前面需要加 /，其余子路由都不要以/开头
+
+```json
+{
+  path: '/level',
+  component: Layout,
+  redirect: '/level/menu1/menu1-1/menu1-1-1',
+  name: 'Level',
+  meta: {
+    title: t('router.level'),
+    icon: 'carbon:skill-level-advanced'
+  },
+  children: [
+    {
+      path: 'menu1',
+      name: 'Menu1',
+      component: getParentLayout(),
+      redirect: '/level/menu1/menu1-1/menu1-1-1',
+      meta: {
+        title: t('router.menu1')
+      },
+      children: [
+        {
+          path: 'menu1-1',
+          name: 'Menu11',
+          component: getParentLayout(),
+          redirect: '/level/menu1/menu1-1/menu1-1-1',
+          meta: {
+            title: t('router.menu11'),
+            alwaysShow: true
+          },
+          children: [
+            {
+              path: 'menu1-1-1',
+              name: 'Menu111',
+              component: () => import('@/views/Level/Menu111.vue'),
+              meta: {
+                title: t('router.menu111')
+              }
+            }
+          ]
+        },
+        {
+          path: 'menu1-2',
+          name: 'Menu12',
+          component: () => import('@/views/Level/Menu12.vue'),
+          meta: {
+            title: t('router.menu12')
+          }
+        }
+      ]
+    },
+    {
+      path: 'menu2',
+      name: 'Menu2Demo',
+      component: () => import('@/views/Level/Menu2.vue'),
+      meta: {
+        title: t('router.menu2')
+      }
+    }
+  ]
+}
+
+```
+
+### 外链
+
+只需要将 path 设置为需要跳转的HTTP 地址即可。
+
+```json
+{
+  path: '/external-link',
+  component: Layout,
+  meta: {
+    name: 'ExternalLink'
+  },
+  children: [
+    {
+      path: 'https://github.com/kailong321200875/vue-element-plus-admin-doc',
+      meta: { name: 'Link', title: '文档' }
+    }
+  ]
+}
+```
+
+### 页面缓存
+
+开启缓存有 2 个条件
+
+- 路由设置 name，且不能重复
+- 路由对应的组件加上 name，与路由设置的 name 保持一致
+
+```js
+{
+  path: 'menu2',
+  name: 'Menu2',
+  component: () => import('@/views/Level/Menu2.vue'),
+  meta: {
+    title: t('router.menu2')
+  }
+}
+
+// /@/views/Level/Menu2.vue
+<script setup lang="ts">
+defineOptions({
+  name: 'Menu2'
+})
+</script>
+```
+
+> **注意** <br> keep-alive 生效的前提是：需要将路由的 name 属性及对应的页面的 name 设置成一样。因为：<br> include - 字符串或正则表达式，只有名称匹配的组件会被缓存
+
+可以将 noCache 配置成 true 即可关闭缓存或者组件不添加 name 属性。
+
+```json
+{
+  path: 'workplace',
+  component: () => import('@/views/Dashboard/Workplace.vue'),
+  name: 'Workplace',
+  meta: {
+    title: t('router.workplace'),
+    noCache: true
+  }
+}
+```
+
+## 权限
+
+项目中集成了 2 种权限处理方式：
+
+1. 第一种是由前端来控制菜单，即服务端只返回有权限的 keys，由前端自行去匹配
+2. 第二种是通过服务端返回的路由数据结构来动态生成路由表
+
+### 前端控制权限
+
+**实现原理:** 在前端固定写死路由的权限，指定路由有哪些权限可以查看。只初始化通用的路由，需要权限才能访问的路由没有被加入路由表内。在登陆后或者其他方式获取对应的路由 keys 后，遍历路由表去匹配 keys，过滤生成可以访问的路由表，再通过 router.addRoutes 添加到路由实例，实现权限的过滤。
+
+**缺点：** 权限相对不自由，因为路由表的控制在前端，不管是要排序还是修改，都需要前端去修改，服务端只提供有权限的路由 keys
+
+### 后台动态获取
+
+**实现原理：** 是通过接口动态生成路由表，且遵循一定的数据结构返回。前端根据需要处理该数据为可识别的结构，再通过 router.addRoutes 添加到路由实例，实现权限的动态生成。
+
+**优点：** 所有的菜单控制都是通过服务端的接口返回，前端只负责渲染，后期维护成本降低，优先推荐此方式。
+
+### 实现
+
+在 `src/store/modules/permission.ts` 中 `generateRoutes()` 进行更改。
+
+接收的 `type` 参数，目前只是针对于本项目的模拟情况，如果不需要或者不适用，可自行改动。
+
+```ts
+generateRoutes(
+  type: 'server' | 'frontEnd' | 'static',
+  routers?: AppCustomRouteRecordRaw[] | string[]
+): Promise<unknown> {
+  return new Promise<void>((resolve) => {
+    let routerMap: AppRouteRecordRaw[] = []
+    if (type === 'server') {
+      // 模拟后端过滤菜单
+      routerMap = generateRoutesByServer(routers as AppCustomRouteRecordRaw[])
+    } else if (type === 'frontEnd') {
+      // 模拟前端过滤菜单
+      routerMap = generateRoutesByFrontEnd(cloneDeep(asyncRouterMap), routers as string[])
+    } else {
+      // 直接读取静态路由表
+      routerMap = cloneDeep(asyncRouterMap)
+    }
+    // 动态路由，404一定要放到最后面
+    this.addRouters = routerMap.concat([
+      {
+        path: '/:path(.*)*',
+        redirect: '/404',
+        name: '404Page',
+        meta: {
+          hidden: true,
+          breadcrumb: false
+        }
+      }
+    ])
+    // 渲染菜单的所有路由
+    this.routers = cloneDeep(constantRouterMap).concat(routerMap)
+    resolve()
+  })
+}
+```
+
+### 前端控制实现
+
+在 `src/router/generate.ts` 中 `generateRoutesByFrontEnd ()` 进行更改。目前本项目的前端权限控制，是根据 `path` 是否相同来进行过滤演示的，如果不符合需求，需要手动更改以下判断逻辑。
+
+```ts
+// 前端控制路由生成
+export const generateRoutesByFrontEnd = (
+  routes: AppRouteRecordRaw[],
+  keys: string[],
+  basePath = '/'
+): AppRouteRecordRaw[] => {
+  const res: AppRouteRecordRaw[] = []
+
+  for (const route of routes) {
+    const meta = route.meta as RouteMeta
+    // skip some route
+    if (meta.hidden && !meta.showMainRoute) {
+      continue
+    }
+
+    let data: Nullable<AppRouteRecordRaw> = null
+
+    let onlyOneChild: Nullable<string> = null
+    if (route.children && route.children.length === 1 && !meta.alwaysShow) {
+      onlyOneChild = (
+        isUrl(route.children[0].path)
+          ? route.children[0].path
+          : pathResolve(pathResolve(basePath, route.path), route.children[0].path)
+      ) as string
+    }
+
+    // 开发者可以根据实际情况进行扩展
+    for (const item of keys) {
+      // 通过路径去匹配
+      if (isUrl(item) && (onlyOneChild === item || route.path === item)) {
+        data = Object.assign({}, route)
+      } else {
+        const routePath = pathResolve(basePath, onlyOneChild || route.path)
+        if (routePath === item || meta.followRoute === item) {
+          data = Object.assign({}, route)
+        }
+      }
+    }
+
+    // recursive child routes
+    if (route.children && data) {
+      data.children = generateRoutesByFrontEnd(
+        route.children,
+        keys,
+        pathResolve(basePath, data.path)
+      )
+    }
+    if (data) {
+      res.push(data as AppRouteRecordRaw)
+    }
+  }
+  return res
+}
+```
+
+### 后台动态获取
+
+在 `src/router/generate.ts` 中 `generateRoutesByServer ()` 进行更改。
+
+```ts
+// 后端控制路由生成
+export const generateRoutesByServer = (routes: AppCustomRouteRecordRaw[]): AppRouteRecordRaw[] => {
+  const res: AppRouteRecordRaw[] = []
+
+  for (const route of routes) {
+    const data: AppRouteRecordRaw = {
+      path: route.path,
+      name: route.name,
+      redirect: route.redirect,
+      meta: route.meta
+    }
+    if (route.component) {
+      const comModule = modules[`../${route.component}.vue`] || modules[`../${route.component}.tsx`]
+      const component = route.component as string
+      if (!comModule && !component.includes('#')) {
+        console.error(`未找到${route.component}.vue文件或${route.component}.tsx文件，请创建`)
+      } else {
+        // 动态加载路由文件，可根据实际情况进行自定义逻辑
+        data.component =
+          component === '#' ? Layout : component.includes('##') ? getParentLayout() : comModule
+      }
+    }
+    // recursive child routes
+    if (route.children) {
+      data.children = generateRoutesByServer(route.children)
+    }
+    res.push(data as AppRouteRecordRaw)
+  }
+  return res
+}
+```
+
+### 公用部分修改
+
+需要开发者自行根据需求进行代码变更。
+
+```ts
+// 获取角色信息
+const getRole = async () => {
+  const formData = await getFormData<UserType>()
+  const params = {
+    roleName: formData.username
+  }
+  const res =
+    appStore.getDynamicRouter && appStore.getServerDynamicRouter
+      ? await getAdminRoleApi(params)
+      : await getTestRoleApi(params)
+  if (res) {
+    const routers = res.data || []
+    setStorage('roleRouters', routers)
+    appStore.getDynamicRouter && appStore.getServerDynamicRouter
+      ? await permissionStore.generateRoutes('server', routers).catch(() => {})
+      : await permissionStore.generateRoutes('frontEnd', routers).catch(() => {})
+
+    permissionStore.getAddRouters.forEach((route) => {
+      addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
+    })
+    permissionStore.setIsAddRouters(true)
+    push({ path: redirect.value || permissionStore.addRouters[0].path })
+  }
+}
+```
+
+在 `src/router/permission.ts`，以下这种情况，是考虑到手动刷新，所以需要获取到缓存中的动态菜单重新渲染。
+
+```ts
+// 开发者可根据实际情况进行修改
+const roleRouters = getStorage('roleRouters') || []
+
+// 是否使用动态路由
+if (appStore.getDynamicRouter) {
+  appStore.serverDynamicRouter
+    ? await permissionStore.generateRoutes('server', roleRouters as AppCustomRouteRecordRaw[])
+    : await permissionStore.generateRoutes('frontEnd', roleRouters as string[])
+} else {
+  await permissionStore.generateRoutes('static')
+}
+
+permissionStore.getAddRouters.forEach((route) => {
+  router.addRoute(route as unknown as RouteRecordRaw) // 动态添加可访问路由表
+})
+const redirectPath = from.query.redirect || to.path
+const redirect = decodeURIComponent(redirectPath as string)
+const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect }
+permissionStore.setIsAddRouters(true)
+next(nextData)
+```
+
+### 静态路由（无权限）
+
+有时候，我们并不需要动态路由，那么可以在 `src/config/app.ts` 中把 `dynamicRouter` 设置为 `false`，这样我们取得都是项目中的静态路由表了。
+
+内部逻辑已经处理了静态路由的部分，所以可以无需关心其他。
+
+## 组件注册
+
+### 按需引入
+
+项目目前的组件注册机制是按需注册，是在需要用到的页面才引入。
+
+```ts
+<script setup lang="ts">
+import { ElBacktop } from 'element-plus'
+import { useDesign } from '@/hooks/web/useDesign'
+
+const { getPrefixCls, variables } = useDesign()
+
+const prefixCls = getPrefixCls('backtop')
+</script>
+
+<template>
+  <ElBacktop
+    :class="`${prefixCls}-backtop`"
+    :target="`.${variables.namespace}-layout-content-scrollbar .${variables.elNamespace}-scrollbar__wrap`"
+  />
+</template>
+```
+
+### 全局注册
+
+如果觉得按需引入太麻烦，可以进行全局注册，在 `src/components/index.ts`，添加需要注册的组件。
+
+目前只有 `Icon` 组件进行了全局注册
+
+```ts
+import type { App } from 'vue'
+import { Icon } from './Icon'
+
+export const setupGlobCom = (app: App<Element>): void => {
+  app.component('Icon', Icon)
+}
+```
+
+如果 `element-plus` 的组件需要全局注册，在 `src/plugins/element-plus/index.ts` 添加需要注册的组件。
+
+目前 `element-plus` 中只有 `ElLoading` 与 `ElScrollbar` 进行了全局注册。
+
+```ts
+import type { App } from 'vue'
+
+// 需要全局引入一些组件，如ElScrollbar，不然一些下拉项样式有问题
+import { ElLoading, ElScrollbar } from 'element-plus'
+
+const plugins = [ElLoading]
+
+const components = [ElScrollbar]
+
+export const setupElementPlus = (app: App) => {
+  plugins.forEach((plugin) => {
+    app.use(plugin)
+  })
+
+  components.forEach((component) => {
+    app.component(component.name, component)
+  })
+}
+```
