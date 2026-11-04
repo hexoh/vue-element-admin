@@ -1,7 +1,7 @@
 import request from '../service/index'
 
 export const loginApi = (data: LoginParams) => {
-  return request.post<LoginResult>('/mock/user/login', data)
+  return request.post<LoginResult>('/api/auth/login', data)
 }
 
 export const loginOutApi = (): Promise<IResponse> => {

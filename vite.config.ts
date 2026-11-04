@@ -18,9 +18,9 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
       proxy: {
         // 配置代理，将 API 请求转发到后端服务器
         '/api': {
-          target: 'http://localhost:4000', // 后端服务器地址
+          target: env.VITE_API_BASE_URL, // 后端服务器地址
           changeOrigin: true, // 是否修改请求头中的 Origin 字段，默认为 true
-          rewrite: (path) => path.replace(/^\/api/, '') // 重写路径，将 /api 前缀去掉
+          rewrite: (path) => path.replace(/^\/api/, '/hq/api') // 重写路径，将 /api 前缀去掉
         }
       }
     },

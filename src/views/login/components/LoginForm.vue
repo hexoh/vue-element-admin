@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ElButton, ElCheckbox, ElForm, ElFormItem, ElInput } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRouter, type RouteLocationNormalizedLoaded } from 'vue-router'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useUserStoreWithOut } from '@/stores/modules/user'
@@ -16,19 +16,42 @@ const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('login-form')
 
-const router = useRouter()
+const { currentRoute, push } = useRouter()
 
 const userStore = useUserStoreWithOut()
+
+const remember = ref(userStore.getRememberMe)
 
 interface LoginFormData {
   username: string
   password: string
-  remember: boolean
 }
 
 const formRef = useTemplateRef<FormInstance>('formRef')
-
 const loading = ref(false)
+const redirect = ref<string>('')
+
+watch(
+  () => currentRoute.value,
+  (route: RouteLocationNormalizedLoaded) => {
+    redirect.value = route?.query?.redirect as string
+  },
+  {
+    immediate: true
+  }
+)
+
+const initLoginInfo = () => {
+  const loginInfo = userStore.getLoginInfo
+  if (loginInfo) {
+    const { username, password } = loginInfo
+    formData.username = username
+    formData.password = password || ''
+  }
+}
+onMounted(() => {
+  initLoginInfo()
+})
 
 const rules = reactive<FormRules>({
   username: [required()],
@@ -37,8 +60,7 @@ const rules = reactive<FormRules>({
 
 const formData = reactive<LoginFormData>({
   username: 'admin',
-  password: 'admin',
-  remember: true
+  password: 'admin'
 })
 
 const handleLogin = async () => {
@@ -49,10 +71,19 @@ const handleLogin = async () => {
 
   loading.value = true
   try {
-    const res = await loginApi(formData)
-    console.log('login res', res)
-    userStore.setToken(`${formData.username}-${Date.now()}`)
-    await router.push('/')
+    const { data } = await loginApi(formData)
+    console.log('login res', data)
+    if (unref(remember)) {
+      userStore.setLoginInfo({
+        username: formData.username,
+        password: formData.password
+      })
+    } else {
+      userStore.setLoginInfo(undefined)
+    }
+    userStore.setToken(data.access_token, data.refresh_token)
+    userStore.setUserInfo(data.userInfo)
+    await push('/')
   } catch (error) {
     console.error('login error', error)
   } finally {
@@ -90,7 +121,7 @@ const handleLogin = async () => {
       </el-form-item>
 
       <div :class="`${prefixCls}__options`">
-        <el-checkbox v-model="formData.remember">{{ t('login.remember') }}</el-checkbox>
+        <el-checkbox v-model="remember">{{ t('login.remember') }}</el-checkbox>
         <a :class="`${prefixCls}__link`" href="javascript:void(0)">
           {{ t('login.forgetPassword') }}
         </a>

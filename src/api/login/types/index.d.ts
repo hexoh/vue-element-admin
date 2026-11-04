@@ -6,8 +6,8 @@ interface LoginParams {
 }
 
 interface LoginResult {
-  username: string
-  role: string
-  roleId: string
-  permissions: string | string[]
+  access_token: string
+  refresh_token: string
+  userInfo: any
+  permissions: any[]
 }

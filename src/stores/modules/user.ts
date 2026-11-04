@@ -8,18 +8,23 @@ import router from '@/router'
 
 interface User {
   username: string
+  password: string
 }
 
 export const useUserStore = defineStore(
   'user',
   () => {
     const token = ref<string>('')
+    const refreshToken = ref<string>('')
     const roleRouters = ref<string[] | AppCustomRouteRecordRaw[]>([])
     const userInfo = ref<User | null>(null)
     const getTokenKey = computed(() => 'Authorization')
+    const rememberMe = ref<boolean>(true)
+    const loginInfo = ref<User | null>(null)
 
-    const setToken = (newToken: string) => {
-      token.value = newToken
+    const setToken = (_token: string, _refreshToken: string) => {
+      token.value = _token
+      refreshToken.value = _refreshToken
     }
 
     const getToken = computed(() => token.value)
@@ -32,6 +37,12 @@ export const useUserStore = defineStore(
 
     const setUserInfo = (info: User) => {
       userInfo.value = info
+    }
+
+    const getLoginInfo = computed(() => loginInfo.value)
+
+    const setLoginInfo = (info: User | undefined) => {
+      loginInfo.value = info || null
     }
 
     const resetUserInfo = () => {
@@ -75,6 +86,8 @@ export const useUserStore = defineStore(
       reset()
     }
 
+    const getRememberMe = computed<boolean>(() => rememberMe.value)
+
     return {
       userInfo,
       getUserInfo,
@@ -85,7 +98,10 @@ export const useUserStore = defineStore(
       getToken,
       getTokenKey,
       getRoleRouters,
-      logoutConfirm
+      logoutConfirm,
+      getRememberMe,
+      getLoginInfo,
+      setLoginInfo
     }
   },
   {
