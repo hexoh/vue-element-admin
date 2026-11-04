@@ -42,7 +42,7 @@ watch(
 )
 
 const initLoginInfo = () => {
-  const loginInfo = userStore.getLoginInfo
+  const loginInfo = userStore.getLoginInfo()
   if (loginInfo) {
     const { username, password } = loginInfo
     formData.username = username
@@ -59,8 +59,8 @@ const rules = reactive<FormRules>({
 })
 
 const formData = reactive<LoginFormData>({
-  username: 'admin',
-  password: 'admin'
+  username: '',
+  password: ''
 })
 
 const handleLogin = async () => {
@@ -72,7 +72,6 @@ const handleLogin = async () => {
   loading.value = true
   try {
     const { data } = await loginApi(formData)
-    console.log('login res', data)
     if (unref(remember)) {
       userStore.setLoginInfo({
         username: formData.username,
@@ -83,6 +82,7 @@ const handleLogin = async () => {
     }
     userStore.setToken(data.access_token, data.refresh_token)
     userStore.setUserInfo(data.userInfo)
+    userStore.setRoleRouters(data.permissions)
     await push('/')
   } catch (error) {
     console.error('login error', error)
