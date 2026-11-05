@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Form, FormSchema } from '@/components/Form'
+import { Form, type FormSchema } from '@/components/form'
 import { useForm } from '@/hooks/web/useForm'
-import { PropType, reactive, watch } from 'vue'
+import { type PropType, reactive, watch } from 'vue'
 import { useValidator } from '@/hooks/web/useValidator'
-import { DepartmentItem } from '@/api/dept/types'
+import type { DepartmentItem } from '@/api/dept/types'
 
 const { required } = useValidator()
 

@@ -116,12 +116,7 @@ const tableColumns = reactive<TableColumn[]>([
             <BaseButton type="warning" plain size="small" onClick={() => action(data.row, 'edit')}>
               {t('exampleDemo.edit')}
             </BaseButton>
-            <BaseButton
-              color="#1a5fad"
-              plain
-              size="small"
-              onClick={() => action(data.row, 'detail')}
-            >
+            <BaseButton plain size="small" onClick={() => action(data.row, 'detail')}>
               {t('exampleDemo.detail')}
             </BaseButton>
             <BaseButton
@@ -395,7 +390,7 @@ onMounted(() => {
       <div class="mb-10px flex justify-between items-center header-container">
         <Search :schema="searchSchema" @search="setSearchParams" @reset="setSearchParams" />
         <div style="display: flex; align-items: start">
-          <BaseButton color="#1a5fad" :disabled="curSelAdminAreaId === 0" @click="AddAction">
+          <BaseButton type="primary" :disabled="curSelAdminAreaId === 0" @click="AddAction">
             添加
           </BaseButton>
           <BaseButton :loading="delLoading" type="danger" plain @click="delData(null)">
@@ -434,15 +429,13 @@ onMounted(() => {
       <template #footer>
         <BaseButton
           v-if="actionType !== 'detail'"
-          color="#1a5fad"
+          type="primary"
           :loading="saveLoading"
           @click="save"
         >
           {{ t('exampleDemo.save') }}
         </BaseButton>
-        <BaseButton color="#1a5fad" plain @click="dialogVisible = false">{{
-          t('dialogDemo.close')
-        }}</BaseButton>
+        <BaseButton plain @click="dialogVisible = false">{{ t('dialogDemo.close') }}</BaseButton>
       </template>
     </Dialog>
   </div>

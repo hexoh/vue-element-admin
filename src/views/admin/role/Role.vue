@@ -83,7 +83,7 @@ const tableColumns = reactive<TableColumn[]>([
             <BaseButton type="warning" plain size="small" onClick={() => action(row, 'edit')}>
               {t('exampleDemo.edit')}
             </BaseButton>
-            <BaseButton color="#1a5fad" plain size="small" onClick={() => action(row, 'detail')}>
+            <BaseButton plain size="small" onClick={() => action(row, 'detail')}>
               {t('exampleDemo.detail')}
             </BaseButton>
 
@@ -282,15 +282,13 @@ const disableRole = (row: any) => {
     <template #footer>
       <BaseButton
         v-if="actionType !== 'detail'"
-        color="#1a5fad"
+        type="primary"
         :loading="saveLoading"
         @click="save"
       >
         {{ t('exampleDemo.save') }}
       </BaseButton>
-      <BaseButton color="#1a5fad" @click="dialogVisible = false">{{
-        t('dialogDemo.close')
-      }}</BaseButton>
+      <BaseButton @click="dialogVisible = false">{{ t('dialogDemo.close') }}</BaseButton>
     </template>
   </Dialog>
 </template>

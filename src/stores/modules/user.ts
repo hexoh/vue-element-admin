@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { store } from '../index'
 import { serializer } from '@/utils/crypto'
 import { loginOutApi } from '@/api/login'
-import { useI18n } from 'vue-i18n'
+import { useI18n } from '@/hooks/web/useI18n'
 import { useTagsViewStore } from './tagsView'
 import router from '@/router'
 
@@ -55,7 +55,7 @@ export const useUserStore = defineStore(
     const token = ref<string>('')
     const refreshToken = ref<string>('')
     const roleRouters = ref<string[] | AppCustomRouteRecordRaw[]>([])
-    const userInfo = ref<LoginResult | null>(null)
+    const userInfo = ref<UserInfo | null>(null)
     const getTokenKey = computed(() => 'Authorization')
     const rememberMe = ref<boolean>(true)
     const loginInfo = ref<User | null>(null)
@@ -73,7 +73,7 @@ export const useUserStore = defineStore(
 
     const getUserInfo = computed(() => userInfo.value)
 
-    const setUserInfo = (info: LoginResult) => {
+    const setUserInfo = (info: UserInfo) => {
       userInfo.value = info
     }
 

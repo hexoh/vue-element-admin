@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
-import { DepartmentItem } from '@/api/dept/types'
-import { Descriptions, DescriptionsSchema } from '@/components/Descriptions'
+import { type PropType } from 'vue'
+import type { DepartmentItem } from '@/api/dept/types'
+import { Descriptions, type DescriptionsSchema } from '@/components/descriptions'
 
 defineProps({
   currentRow: {

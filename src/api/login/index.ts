@@ -9,5 +9,5 @@ export const resetPasswordApi = (data: any): any => {
 }
 
 export const loginOutApi = (): Promise<IResponse> => {
-  return request.get('/mock/user/loginOut')
+  return request.get('/api/auth/logout')
 }

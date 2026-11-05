@@ -11,3 +11,10 @@ interface LoginResult {
   userInfo: any
   permissions: any[]
 }
+
+interface UserInfo {
+  id: string
+  username: string
+  realName: string
+  nickname: string
+}

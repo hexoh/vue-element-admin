@@ -162,7 +162,7 @@ const tableColumns = reactive<TableColumn[]>([
             <BaseButton type="warning" plain size="small" onClick={() => action(row, 'edit')}>
               {t('exampleDemo.edit')}
             </BaseButton>
-            <BaseButton color="#1a5fad" plain size="small" onClick={() => action(row, 'detail')}>
+            <BaseButton plain size="small" onClick={() => action(row, 'detail')}>
               {t('exampleDemo.detail')}
             </BaseButton>
             <BaseButton type="info" plain size="small" onClick={() => resetPassword(row)}>
@@ -449,10 +449,10 @@ const resetPassword = (row: any) => {
         <Search :schema="searchSchema" @reset="resetSearch" @search="setSearchParams" />
 
         <div class="mb-10px">
-          <BaseButton color="#1a5fad" @click="AddAction">
+          <BaseButton type="primary" @click="AddAction">
             {{ t('exampleDemo.add') }}
           </BaseButton>
-          <BaseButton :loading="delLoading" color="#1a5fad" plain @click="delData()">
+          <BaseButton :loading="delLoading" type="warning" plain @click="delData()">
             {{ t('exampleDemo.del') }}
           </BaseButton>
         </div>
@@ -487,15 +487,13 @@ const resetPassword = (row: any) => {
       <template #footer>
         <BaseButton
           v-if="actionType !== 'detail'"
-          color="#1a5fad"
+          type="primary"
           :loading="saveLoading"
           @click="save"
         >
           {{ t('exampleDemo.save') }}
         </BaseButton>
-        <BaseButton color="#1a5fad" plain @click="dialogVisible = false">{{
-          t('dialogDemo.close')
-        }}</BaseButton>
+        <BaseButton plain @click="dialogVisible = false">{{ t('dialogDemo.close') }}</BaseButton>
       </template>
     </Dialog>
   </div>
