@@ -120,6 +120,10 @@ export const useUserStore = defineStore(
       reset()
     }
 
+    const setRememberMe = (_rememberMe: boolean) => {
+      rememberMe.value = _rememberMe
+    }
+
     const getRememberMe = computed<boolean>(() => rememberMe.value)
 
     const setRoleRouters = (permissions: PermissionItem[]) => {
@@ -211,6 +215,7 @@ export const useUserStore = defineStore(
       getTokenKey,
       getRoleRouters,
       logoutConfirm,
+      setRememberMe,
       getRememberMe,
       getLoginInfo,
       setLoginInfo,

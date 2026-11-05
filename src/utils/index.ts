@@ -1,4 +1,21 @@
 /**
+ *
+ * @param component 需要注册的组件
+ * @param alias 组件别名
+ * @returns any
+ */
+export const withInstall = <T>(component: T, alias?: string) => {
+  const comp = component as any
+  comp.install = (app: any) => {
+    app.component(comp.name || comp.displayName, component)
+    if (alias) {
+      app.config.globalProperties[alias] = component
+    }
+  }
+  return component as T & Plugin
+}
+
+/**
  * 首字母大写
  */
 export function firstUpperCase(str: string) {
@@ -72,4 +89,64 @@ export const findIndex = <T = Recordable>(ary: Array<T>, fn: Fn): number => {
 
 export const trim = (str: string) => {
   return str.replace(/(^\s*)|(\s*$)/g, '')
+}
+
+/**
+ * 生成随机字符串
+ */
+export function toAnyString() {
+  const str: string = 'xxxxx-xxxxx-4xxxx-yxxxx-xxxxx'.replace(/[xy]/g, (c: string) => {
+    const r: number = (Math.random() * 16) | 0
+    const v: number = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString()
+  })
+  return str
+}
+
+/**
+ * 格式化时间
+ * @param {Date | number | string} time 需要转换的时间
+ * @param {String} fmt 需要转换的格式 如 yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
+ */
+export function formatTime(
+  time: Date | number | string | null | undefined,
+  fmt: string = 'yyyy-MM-dd HH:mm:ss'
+) {
+  // 处理 null、undefined 和空字符串
+  if (time === null || time === undefined || time === '') {
+    return ''
+  }
+
+  // 处理 fmt 为空的情况
+  if (!fmt || typeof fmt !== 'string') {
+    fmt = 'yyyy-MM-dd HH:mm:ss'
+  }
+
+  // 确保 time 是有效的日期值
+  const date = new Date(time)
+  if (isNaN(date.getTime())) return ''
+
+  const o: Record<string, number> = {
+    'M+': date.getMonth() + 1,
+    'd+': date.getDate(),
+    'H+': date.getHours(),
+    'm+': date.getMinutes(),
+    's+': date.getSeconds(),
+    'q+': Math.floor((date.getMonth() + 3) / 3),
+    S: date.getMilliseconds()
+  }
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+  }
+  for (const k in o) {
+    if (new RegExp('(' + k + ')').test(fmt)) {
+      // noUncheckedIndexedAccess 下 o[k] 为 number | undefined
+      const value = o[k] ?? 0
+      fmt = fmt.replace(
+        RegExp.$1,
+        RegExp.$1.length === 1 ? String(value) : ('00' + value).substr(('' + value).length)
+      )
+    }
+  }
+  return fmt
 }

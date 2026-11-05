@@ -80,6 +80,7 @@ const handleLogin = async () => {
     } else {
       userStore.setLoginInfo(undefined)
     }
+    userStore.setRememberMe(unref(remember))
     userStore.setToken(data.access_token, data.refresh_token)
     userStore.setUserInfo(data.userInfo)
     userStore.setRoleRouters(data.permissions)
