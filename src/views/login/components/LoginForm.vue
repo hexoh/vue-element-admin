@@ -42,7 +42,7 @@ watch(
 )
 
 const initLoginInfo = () => {
-  const loginInfo = userStore.getLoginInfo()
+  const loginInfo = userStore.getLoginInfo
   if (loginInfo) {
     const { username, password } = loginInfo
     formData.username = username

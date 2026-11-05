@@ -65,19 +65,19 @@ export const useUserStore = defineStore(
       refreshToken.value = _refreshToken
     }
 
-    const getToken = () => token.value
+    const getToken = computed(() => token.value)
 
     const removeToken = () => {
       token.value = ''
     }
 
-    const getUserInfo = () => userInfo.value
+    const getUserInfo = computed(() => userInfo.value)
 
     const setUserInfo = (info: LoginResult) => {
       userInfo.value = info
     }
 
-    const getLoginInfo = () => loginInfo.value
+    const getLoginInfo = computed(() => loginInfo.value)
 
     const setLoginInfo = (info: User | undefined) => {
       loginInfo.value = info || null
@@ -196,7 +196,12 @@ export const useUserStore = defineStore(
     }
 
     return {
+      token,
+      refreshToken,
+      roleRouters,
       userInfo,
+      rememberMe,
+      loginInfo,
       getUserInfo,
       setUserInfo,
       resetUserInfo,
